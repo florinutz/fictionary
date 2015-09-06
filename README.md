@@ -1,0 +1,2 @@
+# fictionary
+a fictional dictionary
