@@ -3,3 +3,6 @@
 vendor
 app/cache
 app/logs
+bower_components
+node_modules
+web/assets
