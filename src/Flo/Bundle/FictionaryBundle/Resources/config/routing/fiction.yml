@@ -1,0 +1,30 @@
+back:
+    path:     /
+    defaults: { _controller: "FloFictionaryBundle:Fiction:index" }
+
+back_show:
+    path:     /{id}/show
+    defaults: { _controller: "FloFictionaryBundle:Fiction:show" }
+
+back_new:
+    path:     /new
+    defaults: { _controller: "FloFictionaryBundle:Fiction:new" }
+
+back_create:
+    path:     /create
+    defaults: { _controller: "FloFictionaryBundle:Fiction:create" }
+    methods:  POST
+
+back_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "FloFictionaryBundle:Fiction:edit" }
+
+back_update:
+    path:     /{id}/update
+    defaults: { _controller: "FloFictionaryBundle:Fiction:update" }
+    methods:  [POST, PUT]
+
+back_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "FloFictionaryBundle:Fiction:delete" }
+    methods:  [POST, DELETE]

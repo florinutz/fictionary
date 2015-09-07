@@ -1,0 +1,11 @@
+flo_fictionary_backend:
+    resource: "@FloFictionaryBundle/Resources/config/routing/fiction.yml"
+    prefix:   /admin
+
+flo_fictionary_front_list:
+    path:     /
+    defaults: { _controller: FloFictionaryBundle:Front:index }
+
+flo_fictionary_front_show:
+    path:     /fictiune/{id}
+    defaults: { _controller: FloFictionaryBundle:Front:show }

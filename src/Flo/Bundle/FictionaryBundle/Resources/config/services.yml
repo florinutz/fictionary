@@ -1,0 +1,4 @@
+services:
+#    flo_fictionary.example:
+#        class: Flo\Bundle\FictionaryBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
