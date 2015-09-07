@@ -1,0 +1,11 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+<ol>
+    {% for entity in entities %}
+    <li id="fiction-{{ entity.id }}">
+        <a href="{{ path('flo_fictionary_front_show', {'slug': entity.slug}) }}">{{ entity.name }}</a>
+    </li>
+    {% endfor %}
+</ol>
+{% endblock %}

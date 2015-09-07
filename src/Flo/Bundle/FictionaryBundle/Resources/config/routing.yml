@@ -2,10 +2,22 @@ flo_fictionary_backend:
     resource: "@FloFictionaryBundle/Resources/config/routing/fiction.yml"
     prefix:   /admin
 
-flo_fictionary_front_list:
+flo_fictionary_front_home:
     path:     /
-    defaults: { _controller: FloFictionaryBundle:Front:index }
+    defaults: { _controller: FloFictionaryBundle:Front:home }
+
+flo_fictionary_front_contact:
+    path:     /contact
+    defaults: { _controller: FloFictionaryBundle:Front:contact }
+
+flo_fictionary_front_list:
+    path:     /fictiuni
+    defaults: { _controller: FloFictionaryBundle:Front:list }
 
 flo_fictionary_front_show:
-    path:     /fictiune/{id}
+    path:     /fictiune/{slug}
     defaults: { _controller: FloFictionaryBundle:Front:show }
+
+flo_fictionary_front_random:
+    path:     /random
+    defaults: { _controller: FloFictionaryBundle:Front:random }

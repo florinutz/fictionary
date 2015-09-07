@@ -1,4 +1,20 @@
 services:
-#    flo_fictionary.example:
-#        class: Flo\Bundle\FictionaryBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    flo_fictionary.repository.abstract:
+        class: Doctrine\ORM\EntityRepository
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+
+    # repositories
+
+    flo_fictionary.repository.fiction:
+        parent: flo_fictionary.repository.abstract
+        class: Flo\Bundle\FictionaryBundle\Repository\FictionRepository
+        arguments:
+            - Flo\Bundle\FictionaryBundle\Entity\Fiction
+
+
+    # services
+
+    flo_fictionary.reader.fiction:
+        class: Flo\Bundle\FictionaryBundle\Service\Reader\FictionReader
+        arguments: [ @flo_fictionary.repository.fiction ]

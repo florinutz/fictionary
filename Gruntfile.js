@@ -31,6 +31,9 @@ module.exports = function (grunt) {
             }
         },
         uglify : {
+            options: {
+                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+            },
             js: {
                 files: {
                     'web/assets/js/bundled.min.js': ['web/assets/js/bundled.js']
@@ -39,7 +42,7 @@ module.exports = function (grunt) {
         },
         concat: {
             options: {
-                stripBanners: true
+                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
             },
             css: {
                 src: [
