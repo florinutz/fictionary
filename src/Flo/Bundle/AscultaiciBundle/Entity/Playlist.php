@@ -3,6 +3,8 @@ namespace Flo\Bundle\AscultaiciBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Flo\Bundle\AscultaiciBundle\Entity\Tag\PlaylistTagging;
+use Flo\Bundle\AscultaiciBundle\Entity\Url\Url;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Flo\Bundle\AscultaiciBundle\Validator\Constraint as AscultAssert;
@@ -56,6 +58,13 @@ class Playlist
     protected $tracks;
 
     /**
+     * @var ArrayCollection|PlaylistTagging[]
+     *
+     * @ORM\OneToMany(targetEntity="Flo\Bundle\AscultaiciBundle\Entity\Tag\PlaylistTagging", mappedBy="playlist")
+     */
+    protected $taggings;
+
+    /**
      * @var \DateTime
      *
      * @Assert\Type("\DateTime")
@@ -80,6 +89,12 @@ class Playlist
      * @ORM\Column(name="updated_at", type="datetime")
      */
     protected $updatedAt;
+
+
+    public function __construct()
+    {
+        $this->tracks = $this->taggings = new ArrayCollection;
+    }
 
 
     /**
@@ -196,4 +211,27 @@ class Playlist
         $this->updatedAt = $updatedAt;
     }
 
+    /**
+     * @param PlaylistTagging $tagging
+     */
+    public function addTagging(PlaylistTagging $tagging)
+    {
+        $this->taggings[] = $tagging;
+    }
+
+    /**
+     * @param PlaylistTagging $tagging
+     */
+    public function removeTagging(PlaylistTagging $tagging)
+    {
+        $this->taggings->removeElement($tagging);
+    }
+
+    /**
+     * @return ArrayCollection|PlaylistTagging[]
+     */
+    public function getTaggings()
+    {
+        return $this->taggings;
+    }
 }

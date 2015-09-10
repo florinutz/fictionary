@@ -1,6 +1,6 @@
 <?php
 
-namespace Flo\Bundle\AscultaiciBundle\Entity;
+namespace Flo\Bundle\AscultaiciBundle\Entity\Url;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -8,8 +8,8 @@ use Flo\Bundle\AscultaiciBundle\Validator\Constraint as AscultAssert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
- * @ORM\Entity(repositoryClass="Flo\Bundle\AscultaiciBundle\Repository\UrlSoundcloudRepository")
+ * @ORM\Entity(repositoryClass="Flo\Bundle\AscultaiciBundle\Repository\Url\UrlMixcloudRepository")
  */
-class UrlSoundcloud extends Url
+class UrlMixcloud extends Url
 {
 }

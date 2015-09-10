@@ -1,5 +1,5 @@
 <?php
-namespace Flo\Bundle\AscultaiciBundle\Entity;
+namespace Flo\Bundle\AscultaiciBundle\Entity\Tag;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 /**
  * @ORM\Table(name="tag")
  *
- * @ORM\Entity(repositoryClass="Flo\Bundle\AscultaiciBundle\Repository\TagRepository")
+ * @ORM\Entity(repositoryClass="Flo\Bundle\AscultaiciBundle\Repository\Tag\TagRepository")
  *
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
@@ -60,11 +60,11 @@ class Tag
     protected $countTracks = 0;
 
     /**
-     * @var ArrayCollection|UrlToTag[]
+     * @var ArrayCollection|Tagging[]
      *
-     * @ORM\OneToMany(targetEntity="UrlToTag", mappedBy="tag")
+     * @ORM\OneToMany(targetEntity="Tagging", mappedBy="tag")
      */
-    protected $tagToUrls;
+    protected $taggings;
 
     /**
      * @var \DateTime
@@ -78,7 +78,7 @@ class Tag
 
     public function __construct()
     {
-        $this->tagToUrls = new ArrayCollection;
+        $this->taggings = new ArrayCollection;
     }
 
 
@@ -172,26 +172,26 @@ class Tag
 
 
     /**
-     * @param UrlToTag $tagToUrls
+     * @param Tagging $tagging
      */
-    public function addTagToUrl(UrlToTag $tagToUrls)
+    public function addTagging(Tagging $tagging)
     {
-        $this->tagToUrls[] = $tagToUrls;
+        $this->taggings[] = $tagging;
     }
 
     /**
-     * @param UrlToTag $tagToUrl
+     * @param Tagging $tagging
      */
-    public function removeTagToUrl(UrlToTag $tagToUrl)
+    public function removeTagging(Tagging $tagging)
     {
-        $this->tagToUrls->removeElement($tagToUrl);
+        $this->taggings->removeElement($tagging);
     }
 
     /**
-     * @return ArrayCollection|UrlToTag[]
+     * @return ArrayCollection|Tagging[]
      */
-    public function getTagToUrls()
+    public function getTaggings()
     {
-        return $this->tagToUrls;
+        return $this->taggings;
     }
 }

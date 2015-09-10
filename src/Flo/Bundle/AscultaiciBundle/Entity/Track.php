@@ -3,10 +3,12 @@ namespace Flo\Bundle\AscultaiciBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Flo\Bundle\AscultaiciBundle\Entity\Tag\TrackTagging;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Flo\Bundle\AscultaiciBundle\Validator\Constraint as AscultAssert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Flo\Bundle\AscultaiciBundle\Entity\Url\Url;
 
 /**
  * @ORM\Table(name="track")
@@ -29,7 +31,7 @@ class Track
     /**
      * @var Url
      *
-     * @ORM\ManyToOne(targetEntity="Url", inversedBy="tracks")
+     * @ORM\ManyToOne(targetEntity="Flo\Bundle\AscultaiciBundle\Entity\Url\Url", inversedBy="tracks")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="url_id", referencedColumnName="id", nullable=false)
      * })
@@ -87,6 +89,13 @@ class Track
     protected $stop;
 
     /**
+     * @var ArrayCollection|TrackTagging[]
+     *
+     * @ORM\OneToMany(targetEntity="Flo\Bundle\AscultaiciBundle\Entity\Tag\TrackTagging", mappedBy="track")
+     */
+    protected $taggings;
+
+    /**
      * @var \DateTime
      *
      * @Assert\Type("\DateTime")
@@ -111,6 +120,12 @@ class Track
      * @ORM\Column(name="updated_at", type="datetime")
      */
     protected $updatedAt;
+
+
+    public function __construct()
+    {
+        $this->taggings = new ArrayCollection;
+    }
 
 
     /**
@@ -296,4 +311,27 @@ class Track
         $this->updatedAt = $updatedAt;
     }
 
+    /**
+     * @param TrackTagging $tagging
+     */
+    public function addTagging(TrackTagging $tagging)
+    {
+        $this->taggings[] = $tagging;
+    }
+
+    /**
+     * @param TrackTagging $tagging
+     */
+    public function removeTagging(TrackTagging $tagging)
+    {
+        $this->taggings->removeElement($tagging);
+    }
+
+    /**
+     * @return ArrayCollection|TrackTagging[]
+     */
+    public function getTaggings()
+    {
+        return $this->taggings;
+    }
 }

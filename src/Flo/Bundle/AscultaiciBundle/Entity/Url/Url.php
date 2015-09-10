@@ -1,13 +1,15 @@
 <?php
-
-namespace Flo\Bundle\AscultaiciBundle\Entity;
+namespace Flo\Bundle\AscultaiciBundle\Entity\Url;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Flo\Bundle\AscultaiciBundle\Entity\Tag\UrlTagging;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Flo\Bundle\AscultaiciBundle\Validator\Constraint as AscultAssert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Flo\Bundle\AscultaiciBundle\Entity\Tag\Tagging;
+use Flo\Bundle\AscultaiciBundle\Entity\Track;
 
 /**
  * @ORM\Table(name="url")
@@ -21,18 +23,18 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  * )
  *
  * @ORM\DiscriminatorMap({
- *   "youtube" = "Flo\Bundle\AscultaiciBundle\Entity\UrlYoutube",
- *   "soundcloud" = "Flo\Bundle\AscultaiciBundle\Entity\UrlSoundcloud",
- *   "mixcloud" = "Flo\Bundle\AscultaiciBundle\Entity\UrlMixcloud"
+ *   "youtube" = "Flo\Bundle\AscultaiciBundle\Entity\Url\UrlYoutube",
+ *   "soundcloud" = "Flo\Bundle\AscultaiciBundle\Entity\Url\UrlSoundcloud",
+ *   "mixcloud" = "Flo\Bundle\AscultaiciBundle\Entity\Url\UrlMixcloud"
  * })
  *
  * @ORM\Entity(
- *   repositoryClass="Flo\Bundle\AscultaiciBundle\Repository\UrlRepository"
+ *   repositoryClass="Flo\Bundle\AscultaiciBundle\Repository\Url\UrlRepository"
  * )
  *
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
-abstract class Url
+class Url
 {
     /**
      * @var integer
@@ -46,16 +48,16 @@ abstract class Url
     /**
      * @var ArrayCollection|Track[]
      *
-     * @ORM\OneToMany(targetEntity="Track", mappedBy="url")
+     * @ORM\OneToMany(targetEntity="Flo\Bundle\AscultaiciBundle\Entity\Track", mappedBy="url")
      */
     protected $tracks;
 
     /**
-     * @var ArrayCollection|UrlToTag[]
+     * @var ArrayCollection|UrlTagging[]
      *
-     * @ORM\OneToMany(targetEntity="UrlToTag", mappedBy="url")
+     * @ORM\OneToMany(targetEntity="Flo\Bundle\AscultaiciBundle\Entity\Tag\UrlTagging", mappedBy="url")
      */
-    protected $urlToTags;
+    protected $taggings;
 
     /**
      * @var string
@@ -126,8 +128,7 @@ abstract class Url
 
     public function __construct()
     {
-        $this->tracks = new ArrayCollection;
-        $this->urlToTags = new ArrayCollection;
+        $this->tracks = $this->taggings = new ArrayCollection;
     }
 
 
@@ -291,26 +292,26 @@ abstract class Url
     }
 
     /**
-     * @param UrlToTag $urlToTags
+     * @param UrlTagging $tagging
      */
-    public function addUrlToTag(UrlToTag $urlToTags)
+    public function addTagging(UrlTagging $tagging)
     {
-        $this->urlToTags[] = $urlToTags;
+        $this->taggings[] = $tagging;
     }
 
     /**
-     * @param UrlToTag $urlToTags
+     * @param UrlTagging $tagging
      */
-    public function removeUrlToTag(UrlToTag $urlToTags)
+    public function removeTagging(UrlTagging $tagging)
     {
-        $this->urlToTags->removeElement($urlToTags);
+        $this->taggings->removeElement($tagging);
     }
 
     /**
-     * @return ArrayCollection|UrlToTag[]
+     * @return ArrayCollection|UrlTagging[]
      */
-    public function getUrlToTags()
+    public function getTaggings()
     {
-        return $this->urlToTags;
+        return $this->taggings;
     }
 }

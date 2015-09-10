@@ -1,5 +1,5 @@
 <?php
-namespace Flo\Bundle\AscultaiciBundle\Repository;
+namespace Flo\Bundle\AscultaiciBundle\Repository\Tag;
 
 use Doctrine\ORM\EntityRepository;
 use Flo\Bundle\AscultaiciBundle\Entity\Tag;
