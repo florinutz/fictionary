@@ -15,7 +15,11 @@ use Flo\Bundle\AscultaiciBundle\Entity\Url\Url;
 /**
  * @ORM\Table(
  *   name="tagging",
- *   uniqueConstraints={@UniqueConstraint(name="tagging_unique",columns={"url_id", "tag_id", "type"})}
+ *   uniqueConstraints={
+ *      @UniqueConstraint(name="url_tag_unique",columns={"url_id", "tag_id", "type"}),
+ *      @UniqueConstraint(name="track_unique",columns={"track_id", "tag_id", "type"}),
+ *      @UniqueConstraint(name="playlist_unique",columns={"playlist_id", "tag_id", "type"})
+ *   }
  * )
  *
  * @ORM\InheritanceType("SINGLE_TABLE")
