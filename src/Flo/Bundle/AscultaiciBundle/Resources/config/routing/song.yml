@@ -1,0 +1,30 @@
+song:
+    path:     /
+    defaults: { _controller: "FloAscultaiciBundle:Song:index" }
+
+song_show:
+    path:     /{id}/show
+    defaults: { _controller: "FloAscultaiciBundle:Song:show" }
+
+song_new:
+    path:     /new
+    defaults: { _controller: "FloAscultaiciBundle:Song:new" }
+
+song_create:
+    path:     /create
+    defaults: { _controller: "FloAscultaiciBundle:Song:create" }
+    methods:  POST
+
+song_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "FloAscultaiciBundle:Song:edit" }
+
+song_update:
+    path:     /{id}/update
+    defaults: { _controller: "FloAscultaiciBundle:Song:update" }
+    methods:  [POST, PUT]
+
+song_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "FloAscultaiciBundle:Song:delete" }
+    methods:  [POST, DELETE]

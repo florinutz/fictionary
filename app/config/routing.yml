@@ -1,3 +1,7 @@
+flo_ascultaici:
+    resource: "@FloAscultaiciBundle/Resources/config/routing.yml"
+    prefix:   /ascultaici
+
 flo_fictionary:
     resource: "@FloFictionaryBundle/Resources/config/routing.yml"
     prefix:   /

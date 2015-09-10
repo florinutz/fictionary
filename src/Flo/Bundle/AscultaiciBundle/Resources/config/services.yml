@@ -1,0 +1,32 @@
+parameters:
+    flo_ascultaici.google_email: '194562557751-pqicjn4f2mibtohrnrlno0pth87fua58@developer.gserviceaccount.com'
+    flo_ascultaici.google_client_id: '194562557751-pqicjn4f2mibtohrnrlno0pth87fua58.apps.googleusercontent.com'
+    flo_ascultaici.google_scopes: [ 'https://www.googleapis.com/auth/youtube.readonly' ]
+    flo_ascultaici.google_key_file: '/home/vagrant/google.json'
+
+services:
+
+    #repositories
+
+    flo_ascultaici.repository.song:
+        parent: flo_fictionary.repository.abstract
+        class: Flo\Bundle\AscultaiciBundle\Repository\SongRepository
+        arguments:
+            - Flo\Bundle\AscultaiciBundle\Entity\Song
+
+    # validators
+
+    flo_ascultaici.validator.url.youtube:
+        class: Flo\Bundle\AscultaiciBundle\Validator\Constraint\UrlYoutubeValidator
+        tags:
+            - { name: validator.constraint_validator, alias: url_youtube }
+
+    # handlers
+
+    flo_ascultaici.api_crawler:
+        class: Flo\Bundle\AscultaiciBundle\Service\ApiCrawler
+        arguments: [ @flo_ascultaici.repository.song ]
+
+    flo_ascultaici.api.youtube:
+        class: Flo\Bundle\AscultaiciBundle\Service\Api\Adapter\YoutubeProvider
+        arguments: [ %flo_ascultaici.google_email%, %flo_ascultaici.google_key_file%, %flo_ascultaici.google_scopes% ]

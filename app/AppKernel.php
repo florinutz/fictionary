@@ -18,6 +18,7 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new Flo\Bundle\FictionaryBundle\FloFictionaryBundle(),
+            new Flo\Bundle\AscultaiciBundle\FloAscultaiciBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

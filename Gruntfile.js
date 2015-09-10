@@ -1,6 +1,7 @@
 module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+
         bowercopy: {
             options: {
                 srcPrefix: 'bower_components',
@@ -25,9 +26,13 @@ module.exports = function (grunt) {
             }
         },
         cssmin : {
-            bundled:{
-                src: 'web/assets/css/bundled.css',
-                dest: 'web/assets/css/bundled.min.css'
+            fictionary:{
+                src: 'web/assets/css/fictionary.css',
+                dest: 'web/assets/css/fictionary.min.css'
+            },
+            ascultaici:{
+                src: 'web/assets/css/ascultaici.css',
+                dest: 'web/assets/css/ascultaici.min.css'
             }
         },
         uglify : {
@@ -36,7 +41,8 @@ module.exports = function (grunt) {
             },
             js: {
                 files: {
-                    'web/assets/js/bundled.min.js': ['web/assets/js/bundled.js']
+                    'web/assets/js/fictionary.min.js': ['web/assets/js/fictionary.js'],
+                    'web/assets/js/ascultaici.min.js': ['web/assets/js/ascultaici.js']
                 }
             }
         },
@@ -44,29 +50,51 @@ module.exports = function (grunt) {
             options: {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
             },
-            css: {
+            css_fictionary: {
                 src: [
                     'web/assets/css/bootstrap.css',
                     'web/assets/css/font-awesome.css',
-                    'src/Flo/Bundle/**/Resources/public/css/*.css'
+                    'src/Flo/Bundle/FictionaryBundle/Resources/public/css/*.css'
                 ],
-                dest: 'web/assets/css/bundled.css'
+                dest: 'web/assets/css/fictionary.css'
             },
-            js : {
+            js_fictionary: {
                 src : [
                     'web/assets/js/jquery.js',
                     'web/assets/js/bootstrap.js',
-                    'src/Flo/Bundle/**/Resources/public/js/*.js'
+                    'src/Flo/Bundle/FictionaryBundle/Resources/public/js/*.js'
                 ],
-                dest: 'web/assets/js/bundled.js'
+                dest: 'web/assets/js/fictionary.js'
+            },
+            css_ascultaici: {
+                src: [
+                    'web/assets/css/bootstrap.css',
+                    'web/assets/css/font-awesome.css',
+                    'src/Flo/Bundle/AscultaiciBundle/Resources/public/css/*.css'
+                ],
+                dest: 'web/assets/css/ascultaici.css'
+            },
+            js_ascultaici: {
+                src : [
+                    'web/assets/js/jquery.js',
+                    'web/assets/js/bootstrap.js',
+                    'src/Flo/Bundle/AscultaiciBundle/Resources/public/js/*.js'
+                ],
+                dest: 'web/assets/js/ascultaici.js'
             }
         },
         copy: {
-            images: {
+            images_fictionary: {
                 expand: true,
-                cwd: 'src/Flo/Bundle/**/Resources/public/images',
+                cwd: 'src/Flo/Bundle/FictionaryBundle/Resources/public/images',
                 src: '*',
-                dest: 'web/assets/images/'
+                dest: 'web/assets/images/fictionary/'
+            },
+            images_ascultaici: {
+                expand: true,
+                cwd: 'src/Flo/Bundle/AscultaiciBundle/Resources/public/images',
+                src: '*',
+                dest: 'web/assets/images/ascultaici/'
             }
         }
     });

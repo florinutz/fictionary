@@ -1,0 +1,7 @@
+flo_ascultaici_song:
+    resource: "@FloAscultaiciBundle/Resources/config/routing/song.yml"
+    prefix:   /song
+
+#flo_ascultaici_homepage:
+#    path:     /hello/{name}
+#    defaults: { _controller: FloAscultaiciBundle:Default:index }

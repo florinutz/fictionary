@@ -1,0 +1,17 @@
+{% extends '::ascultaici.html.twig' %}
+
+{% block body -%}
+    <h1>Song creation</h1>
+
+    {{ form(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('song') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+    <a href="https://www.youtube.com/watch?v=2Iueu1944TY" class="oembed"></a>
+
+{% endblock %}
