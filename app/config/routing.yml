@@ -5,3 +5,7 @@ flo_ascultaici:
 flo_fictionary:
     resource: "@FloFictionaryBundle/Resources/config/routing.yml"
     prefix:   /
+
+users:
+    resource: @FloUserBundle/Resources/config/routing_users.yml
+    prefix: /

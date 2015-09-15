@@ -1,0 +1,7 @@
+parameters:
+    flo_user.provider.class: Flo\Bundle\UserBundle\Security\Core\User\UserProvider
+
+services:
+    flo_user.provider:
+        class: "%flo_user.provider.class%"
+        arguments: [ @fos_user.user_manager, {facebook: facebook_id, google: google_id} ]
