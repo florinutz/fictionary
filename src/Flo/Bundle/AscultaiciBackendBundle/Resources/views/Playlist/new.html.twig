@@ -1,0 +1,15 @@
+{% extends '::ascultaici.html.twig' %}
+
+{% block body -%}
+    <h1>Playlist creation</h1>
+
+    {{ form(form) }}
+
+    <ul class="record_actions">
+    <li>
+        <a href="{{ path('ascultaici_playlist') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}

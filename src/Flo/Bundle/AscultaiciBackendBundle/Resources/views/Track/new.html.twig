@@ -1,0 +1,20 @@
+{% extends '::ascultaici.html.twig' %}
+
+{% block body -%}
+    <h1><a href="{{ path("ascultaici_playlist_show", {id: playlist.id}) }}">{{ playlist.title }}</a> > new track</h1>
+
+    {{ form(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('ascultaici_track') }}">
+            playlists
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('ascultaici_playlist_edit', {id: playlist.id}) }}">
+            edit
+        </a>
+    </li>
+</ul>
+{% endblock %}

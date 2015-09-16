@@ -1,6 +1,8 @@
 <?php
 namespace Flo\Bundle\UserBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Flo\Bundle\AscultaiciBundle\Entity\Playlist;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -19,8 +21,17 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
-        // your own logic
+
+        $this->playlists = new ArrayCollection;
     }
+
+
+    /**
+     * @var ArrayCollection|Playlist[]
+     *
+     * @ORM\OneToMany(targetEntity="Flo\Bundle\AscultaiciBundle\Entity\Playlist", mappedBy="createdBy")
+     */
+    protected $playlists;
 
     /**
      * @var string

@@ -1,0 +1,30 @@
+ascultaici_track:
+    path:     /
+    defaults: { _controller: "FloAscultaiciBackendBundle:Track:index" }
+
+ascultaici_track_show:
+    path:     /{id}/show
+    defaults: { _controller: "FloAscultaiciBackendBundle:Track:show" }
+
+ascultaici_track_new:
+    path:     /new/{playlist}
+    defaults: { _controller: "FloAscultaiciBackendBundle:Track:new" }
+
+ascultaici_track_create:
+    path:     /create/{playlist}
+    defaults: { _controller: "FloAscultaiciBackendBundle:Track:create" }
+    methods:  POST
+
+ascultaici_track_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "FloAscultaiciBackendBundle:Track:edit" }
+
+ascultaici_track_update:
+    path:     /{id}/update
+    defaults: { _controller: "FloAscultaiciBackendBundle:Track:update" }
+    methods:  [POST, PUT]
+
+ascultaici_track_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "FloAscultaiciBackendBundle:Track:delete" }
+    methods:  [POST, DELETE]

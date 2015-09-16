@@ -5,6 +5,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Flo\Bundle\AscultaiciBundle\Entity\Tag\PlaylistTagging;
 use Flo\Bundle\AscultaiciBundle\Entity\Url\Url;
+use Flo\Bundle\AscultaiciBundle\FloAscultaiciBundle;
+use Flo\Bundle\UserBundle\Entity\User;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Flo\Bundle\AscultaiciBundle\Validator\Constraint as AscultAssert;
@@ -90,12 +92,41 @@ class Playlist
      */
     protected $updatedAt;
 
+    /**
+     * @var User
+     *
+     * @Gedmo\Blameable(on="create")
+     *
+     * @ORM\ManyToOne(targetEntity="Flo\Bundle\UserBundle\Entity\User", inversedBy="playlists")
+     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=false)
+     */
+    protected $createdBy;
+
+    /**
+     * @var User
+     *
+     * @Gedmo\Blameable(on="update")
+     *
+     * @ORM\ManyToOne(targetEntity="Flo\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="updated_by", referencedColumnName="id", nullable=true)
+     */
+    protected $updatedBy;
+
 
     public function __construct()
     {
         $this->tracks = $this->taggings = new ArrayCollection;
     }
 
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * @param string $title
@@ -234,4 +265,37 @@ class Playlist
     {
         return $this->taggings;
     }
+
+    /**
+     * @return User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * @param User $createdBy
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUpdatedBy()
+    {
+        return $this->updatedBy;
+    }
+
+    /**
+     * @param User $updatedBy
+     */
+    public function setUpdatedBy($updatedBy)
+    {
+        $this->updatedBy = $updatedBy;
+    }
+
 }

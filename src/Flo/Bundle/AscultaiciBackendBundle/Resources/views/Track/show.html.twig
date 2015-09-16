@@ -1,7 +1,7 @@
 {% extends '::ascultaici.html.twig' %}
 
 {% block body -%}
-    <h1>Song</h1>
+    <h1>Track</h1>
 
     <table class="record_properties">
         <tbody>
@@ -18,20 +18,16 @@
                 <td>{{ entity.slug }}</td>
             </tr>
             <tr>
-                <th>Source</th>
-                <td>{{ entity.url }}</td>
-            </tr>
-            <tr>
                 <th>Description</th>
                 <td>{{ entity.description }}</td>
             </tr>
             <tr>
-                <th>Releasedate</th>
-                <td>{{ entity.releaseDate|date('Y-m-d H:i:s') }}</td>
+                <th>Start</th>
+                <td>{{ entity.start }}</td>
             </tr>
             <tr>
-                <th>Location</th>
-                <td>{{ entity.location }}</td>
+                <th>Stop</th>
+                <td>{{ entity.stop }}</td>
             </tr>
             <tr>
                 <th>Createdat</th>
@@ -50,12 +46,12 @@
 
         <ul class="record_actions">
     <li>
-        <a href="{{ path('song') }}">
+        <a href="{{ path('ascultaici_track') }}">
             Back to the list
         </a>
     </li>
     <li>
-        <a href="{{ path('song_edit', { 'id': entity.id }) }}">
+        <a href="{{ path('ascultaici_track_edit', { 'id': entity.id }) }}">
             Edit
         </a>
     </li>

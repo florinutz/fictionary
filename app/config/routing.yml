@@ -1,3 +1,7 @@
+flo_ascultaici_backend:
+    resource: "@FloAscultaiciBackendBundle/Resources/config/routing.yml"
+    prefix:   /ascultaici/admin
+
 flo_ascultaici:
     resource: "@FloAscultaiciBundle/Resources/config/routing.yml"
     prefix:   /ascultaici

@@ -1,0 +1,11 @@
+flo_ascultaici_backend_homepage:
+    path:     /
+    defaults: { _controller: FloAscultaiciBackendBundle:Default:index }
+
+flo_ascultaici_backend_track:
+    resource: '@FloAscultaiciBackendBundle/Resources/config/routing/track.yml'
+    prefix: /tracks
+
+flo_ascultaici_backend_playlist:
+    resource: '@FloAscultaiciBackendBundle/Resources/config/routing/playlist.yml'
+    prefix: /playlists

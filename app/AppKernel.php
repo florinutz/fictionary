@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new Flo\Bundle\FictionaryBundle\FloFictionaryBundle(),
             new Flo\Bundle\AscultaiciBundle\FloAscultaiciBundle(),
             new Flo\Bundle\UserBundle\FloUserBundle(),
+            new Flo\Bundle\AscultaiciBackendBundle\FloAscultaiciBackendBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

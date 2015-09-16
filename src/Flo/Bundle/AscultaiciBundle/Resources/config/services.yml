@@ -6,13 +6,63 @@ parameters:
 
 services:
 
-    #repositories
+    # repositories
 
-    flo_ascultaici.repository.song:
+    flo_ascultaici.repository.track:
         parent: flo_fictionary.repository.abstract
-        class: Flo\Bundle\AscultaiciBundle\Repository\SongRepository
-        arguments:
-            - Flo\Bundle\AscultaiciBundle\Entity\Song
+        class: Flo\Bundle\AscultaiciBundle\Repository\TrackRepository
+        arguments: [ Flo\Bundle\AscultaiciBundle\Entity\Track ]
+
+    flo_ascultaici.repository.playlist:
+        parent: flo_fictionary.repository.abstract
+        class: Flo\Bundle\AscultaiciBundle\Repository\PlaylistRepository
+        arguments: [ Flo\Bundle\AscultaiciBundle\Entity\Playlist ]
+
+    flo_ascultaici.repository.playlist_tagging:
+        parent: flo_fictionary.repository.abstract
+        class: Flo\Bundle\AscultaiciBundle\Repository\Tag\PlaylistTaggingRepository
+        arguments: [ Flo\Bundle\AscultaiciBundle\Entity\Tag\PlaylistTagging ]
+
+    flo_ascultaici.repository.tag:
+        parent: flo_fictionary.repository.abstract
+        class: Flo\Bundle\AscultaiciBundle\Repository\Tag\TagRepository
+        arguments: [ Flo\Bundle\AscultaiciBundle\Entity\Tag\Tag ]
+
+    flo_ascultaici.repository.tagging:
+        parent: flo_fictionary.repository.abstract
+        class: Flo\Bundle\AscultaiciBundle\Repository\Tag\TaggingRepository
+        arguments: [ Flo\Bundle\AscultaiciBundle\Entity\Tag\Tagging ]
+
+    flo_ascultaici.repository.track_tagging:
+        parent: flo_fictionary.repository.abstract
+        class: Flo\Bundle\AscultaiciBundle\Repository\Tag\TrackTaggingRepository
+        arguments: [ Flo\Bundle\AscultaiciBundle\Entity\Tag\TrackTagging ]
+
+    flo_ascultaici.repository.url_tagging:
+        parent: flo_fictionary.repository.abstract
+        class: Flo\Bundle\AscultaiciBundle\Repository\Tag\UrlTaggingRepository
+        arguments: [ Flo\Bundle\AscultaiciBundle\Entity\Tag\UrlTagging ]
+
+    flo_ascultaici.repository.url:
+        parent: flo_fictionary.repository.abstract
+        class: Flo\Bundle\AscultaiciBundle\Repository\Url\UrlRepository
+        arguments: [ Flo\Bundle\AscultaiciBundle\Entity\Url\Url ]
+
+    flo_ascultaici.repository.url_mixcloud:
+        parent: flo_fictionary.repository.abstract
+        class: Flo\Bundle\AscultaiciBundle\Repository\Url\UrlMixcloudRepository
+        arguments: [ Flo\Bundle\AscultaiciBundle\Entity\Url\UrlMixcloud ]
+
+    flo_ascultaici.repository.url_soundcloud:
+        parent: flo_fictionary.repository.abstract
+        class: Flo\Bundle\AscultaiciBundle\Repository\Url\UrlSoundcloudRepository
+        arguments: [ Flo\Bundle\AscultaiciBundle\Entity\Url\UrlSoundcloud ]
+
+    flo_ascultaici.repository.url_youtube:
+        parent: flo_fictionary.repository.abstract
+        class: Flo\Bundle\AscultaiciBundle\Repository\Url\UrlYoutubeRepository
+        arguments: [ Flo\Bundle\AscultaiciBundle\Entity\Url\UrlYoutube ]
+
 
     # validators
 
@@ -25,7 +75,7 @@ services:
 
     flo_ascultaici.api_crawler:
         class: Flo\Bundle\AscultaiciBundle\Service\ApiCrawler
-        arguments: [ @flo_ascultaici.repository.song ]
+        arguments: [ @flo_ascultaici.repository.url ]
 
     flo_ascultaici.api.youtube:
         class: Flo\Bundle\AscultaiciBundle\Service\Api\Adapter\YoutubeProvider

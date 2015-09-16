@@ -86,6 +86,7 @@ stof_doctrine_extensions:
         default:
             sluggable: true
             timestampable: true
+            blameable: true
 
 fos_user:
     db_driver: orm

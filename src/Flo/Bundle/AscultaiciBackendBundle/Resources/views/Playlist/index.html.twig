@@ -1,0 +1,43 @@
+{% extends '::ascultaici.html.twig' %}
+
+{% block body -%}
+    <h1>Playlists</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Created</th>
+                <th>Updated</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('ascultaici_playlist_show', { 'id': entity.id }) }}">{{ entity.title }}</a></td>
+                <td>{% if entity.createdAt %}{{ entity.createdAt|date('Y-m-d H:i') }}{% endif %}</td>
+                <td>{% if entity.updatedAt %}{{ entity.updatedAt|date('Y-m-d H:i') }}{% endif %}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('ascultaici_playlist_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('ascultaici_playlist_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('ascultaici_playlist_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+{% endblock %}
