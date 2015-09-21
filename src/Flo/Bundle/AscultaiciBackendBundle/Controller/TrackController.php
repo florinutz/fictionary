@@ -13,7 +13,6 @@ class TrackController extends Controller
 {
     /**
      * Lists all Track entities.
-     *
      */
     public function indexAction()
     {
@@ -38,7 +37,7 @@ class TrackController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $trackSaveHandler = $this->get('flo_ascultaici.handler.save.track');
+            $trackSaveHandler = $this->get('flo_ascultaici.handler.track.save');
             $trackSaveHandler->createFromForm($form, $playlist);
             $em = $this->getDoctrine()->getManager();
             $entity->setPlaylist($playlist);
@@ -98,7 +97,7 @@ class TrackController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('FloAscultaiciBundle:Track')->find($id);
+        $entity = $em->getRepository('FloAscultaiciBundle:Track')->findWithUrl($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Track entity.');

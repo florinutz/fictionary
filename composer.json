@@ -26,7 +26,9 @@
         "hwi/oauth-bundle": "^0.3.9"
     },
     "require-dev": {
-        "sensio/generator-bundle": "~2.3"
+        "sensio/generator-bundle": "~2.3",
+        "symfony/phpunit-bridge": "2.7.x@beta",
+        "phpunit/phpunit": "4.8.*"
     },
     "scripts": {
         "post-root-package-install": [

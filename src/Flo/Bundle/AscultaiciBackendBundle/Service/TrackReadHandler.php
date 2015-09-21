@@ -1,15 +1,16 @@
 <?php
-namespace Flo\Bundle\AscultaiciBackendBundle;
+namespace Flo\Bundle\AscultaiciBackendBundle\Service;
 
+use Doctrine\ORM\EntityManager;
 use Flo\Bundle\AscultaiciBundle\Entity\Track;
 use Flo\Bundle\AscultaiciBundle\Entity\Url\Url;
 use Flo\Bundle\AscultaiciBundle\Repository\TrackRepository;
 use Flo\Bundle\AscultaiciBundle\Entity\Playlist;
 use Flo\Bundle\AscultaiciBundle\Repository\PlaylistRepository;
 use Flo\Bundle\AscultaiciBundle\Repository\Url\UrlRepository;
-use Symfony\Component\Form\FormBuilder;
+use Flo\Bundle\AscultaiciBundle\Service\AbstractReadHandler;
 
-class TrackSaveHandler
+class TrackReadHandler extends AbstractReadHandler
 {
     /**
      * @var TrackRepository
@@ -27,45 +28,32 @@ class TrackSaveHandler
     protected $urlRepository;
 
     /**
+     * @param EntityManager $manager
      * @param TrackRepository $trackRepository
      * @param PlaylistRepository $playlistRepository
      * @param UrlRepository $urlRepository
      */
     public function __construct(
+        EntityManager $manager,
         TrackRepository $trackRepository,
         PlaylistRepository $playlistRepository,
         UrlRepository $urlRepository
     ) {
+        parent::__construct($manager);
         $this->trackRepository = $trackRepository;
         $this->playlistRepository = $playlistRepository;
         $this->urlRepository = $urlRepository;
     }
 
     /**
-     * @param string|Url $url
+     * @param int|Url $url
      * @param int|Playlist $playlist
-     * @param string $title
-     * @param string $description
-     * @param $start
-     * @param $to
+     *
+     * @return Track|null
      */
-    public function create($url, $playlist, $title = null, $description = null, $start = null, $to = null)
+    public function findOneByUrlAndPlaylist($url, $playlist)
     {
-
-    }
-
-    /**
-     * @param FormBuilder $form
-     * @param Playlist $playlist
-     */
-    public function createFromForm($form, $playlist)
-    {
-        /** @var Track $track */
-        $track = $form->getData();
-
-        $url = $form->get('url')->getData();
-
-        $url = $this->urlRepository->findOneOrCreate($url);
+        return $this->trackRepository->findOneByUrlAndPlaylist($url, $playlist);
     }
 
 }

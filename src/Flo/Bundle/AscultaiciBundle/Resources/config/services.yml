@@ -71,12 +71,39 @@ services:
         tags:
             - { name: validator.constraint_validator, alias: url_youtube }
 
-    # handlers
+    # factories
 
-    flo_ascultaici.api_crawler:
-        class: Flo\Bundle\AscultaiciBundle\Service\ApiCrawler
-        arguments: [ @flo_ascultaici.repository.url ]
+    flo_ascultaici.factory.url:
+        class: Flo\Bundle\AscultaiciBundle\Service\UrlFactory
+
+    # handlers
 
     flo_ascultaici.api.youtube:
         class: Flo\Bundle\AscultaiciBundle\Service\Api\Adapter\YoutubeProvider
         arguments: [ %flo_ascultaici.google_email%, %flo_ascultaici.google_key_file%, %flo_ascultaici.google_scopes% ]
+
+    flo_ascultaici.handler.url.save:
+        class: Flo\Bundle\AscultaiciBackendBundle\Service\UrlSaveHandler
+        arguments:
+            - @doctrine.orm.default_entity_manager
+            - @flo_ascultaici.repository.url
+            - @flo_ascultaici.repository.url_youtube
+            - @flo_ascultaici.repository.url_soundcloud
+            - @flo_ascultaici.repository.url_mixcloud
+
+    flo_ascultaici.handler.track.save:
+        class: Flo\Bundle\AscultaiciBackendBundle\Service\TrackSaveHandler
+        arguments:
+            - @doctrine.orm.default_entity_manager
+            - @flo_ascultaici.factory.url
+            - @flo_ascultaici.handler.url.save
+            - @flo_ascultaici.repository.track
+            - @flo_ascultaici.repository.playlist
+
+    flo_ascultaici.handler.track.read:
+        class: Flo\Bundle\AscultaiciBackendBundle\Service\TrackReadHandler
+        arguments:
+            - @doctrine.orm.default_entity_manager
+            - @flo_ascultaici.repository.track
+            - @flo_ascultaici.repository.playlist
+            - @flo_ascultaici.repository.url

@@ -19,13 +19,17 @@ use Flo\Bundle\AscultaiciBundle\Entity\Track;
  * @ORM\DiscriminatorColumn(
  *   name="type",
  *   type="string",
- *   columnDefinition="ENUM('youtube', 'soundcloud', 'mixcloud') NOT NULL"
+ *   columnDefinition="ENUM(
+        '\Flo\Bundle\AscultaiciBundle\Repository\Url\UrlRepository::TYPE_YOUTUBE',
+        '\Flo\Bundle\AscultaiciBundle\Repository\Url\UrlRepository::TYPE_SOUNDCLOUD',
+        '\Flo\Bundle\AscultaiciBundle\Repository\Url\UrlRepository::TYPE_MIXCLOUD'
+        ) NOT NULL"
  * )
  *
  * @ORM\DiscriminatorMap({
- *   "youtube" = "Flo\Bundle\AscultaiciBundle\Entity\Url\UrlYoutube",
- *   "soundcloud" = "Flo\Bundle\AscultaiciBundle\Entity\Url\UrlSoundcloud",
- *   "mixcloud" = "Flo\Bundle\AscultaiciBundle\Entity\Url\UrlMixcloud"
+ *   \Flo\Bundle\AscultaiciBundle\Repository\Url\UrlRepository::TYPE_YOUTUBE = "Flo\Bundle\AscultaiciBundle\Entity\Url\UrlYoutube",
+ *   \Flo\Bundle\AscultaiciBundle\Repository\Url\UrlRepository::TYPE_SOUNDCLOUD = "Flo\Bundle\AscultaiciBundle\Entity\Url\UrlSoundcloud",
+ *   \Flo\Bundle\AscultaiciBundle\Repository\Url\UrlRepository::TYPE_MIXCLOUD = "Flo\Bundle\AscultaiciBundle\Entity\Url\UrlMixcloud"
  * })
  *
  * @ORM\Entity(
@@ -34,7 +38,7 @@ use Flo\Bundle\AscultaiciBundle\Entity\Track;
  *
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
-class Url
+abstract class Url
 {
     /**
      * @var integer
@@ -62,16 +66,7 @@ class Url
     /**
      * @var string
      *
-     * @AscultAssert\UrlYoutube
-     *
-     * @ORM\Column(name="url", type="string", length=255, nullable=false)
-     */
-    protected $url;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
+     * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
     protected $title;
 
@@ -79,7 +74,7 @@ class Url
      * @var string
      *
      * @Gedmo\Slug(fields={"title"}, updatable=false, unique=true, separator="-", style="lower")
-     * @ORM\Column(length=128, unique=true)
+     * @ORM\Column(length=128, unique=true, nullable=true)
      */
     protected $slug;
 
@@ -95,7 +90,7 @@ class Url
      *
      * @Assert\GreaterThan(value=0)
      *
-     * @ORM\Column(name="length", type="integer", nullable=false)
+     * @ORM\Column(name="length", type="integer", nullable=true)
      */
     protected $length;
 
@@ -124,6 +119,20 @@ class Url
      * @ORM\Column(name="updated_at", type="datetime")
      */
     protected $updatedAt;
+
+    /**
+     * Assembles the url back from components
+     *
+     * @return string
+     */
+    abstract public function getUrl();
+
+    /**
+     * Splits the url into components
+     *
+     * @param string $url
+     */
+    abstract public function setUrl($url);
 
 
     public function __construct()
@@ -227,27 +236,6 @@ class Url
     {
         $this->updatedAt = $updatedAt;
     }
-
-    /**
-     * Set source
-     *
-     * @param string $url
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-    }
-
-    /**
-     * Get source
-     *
-     * @return string 
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
 
     /**
      * @return int

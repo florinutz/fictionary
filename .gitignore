@@ -6,3 +6,5 @@ app/logs
 bower_components
 node_modules
 web/assets
+app/config/parameters.yml
+bin/phpunit

@@ -10,7 +10,7 @@ parameters:
     mailer_user: null
     mailer_password: null
     secret: ab33dc77205900e0d981046e8a143014a73e9a24
-    facebook_app_id: sasa
-    facebook_app_secret: fsjafsa
+    facebook_app_id: 888183984598408
+    facebook_app_secret: 85c3cd9306ae8ebcd9d91b408ba17df5
     google_app_id: sasa
     google_app_secret: fsjafsa
