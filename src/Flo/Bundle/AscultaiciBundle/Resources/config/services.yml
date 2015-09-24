@@ -107,3 +107,16 @@ services:
             - @flo_ascultaici.repository.track
             - @flo_ascultaici.repository.playlist
             - @flo_ascultaici.repository.url
+
+    flo_ascultaici.handler.playlist.save:
+        class: Flo\Bundle\AscultaiciBackendBundle\Service\PlaylistSaveHandler
+        arguments:
+            - @doctrine.orm.default_entity_manager
+            - @flo_ascultaici.handler.url.save
+            - @flo_ascultaici.repository.playlist
+
+    flo_ascultaici.handler.playlist.read:
+        class: Flo\Bundle\AscultaiciBackendBundle\Service\PlaylistReadHandler
+        arguments:
+            - @doctrine.orm.default_entity_manager
+            - @flo_ascultaici.repository.playlist

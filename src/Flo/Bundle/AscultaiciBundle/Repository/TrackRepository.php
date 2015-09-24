@@ -20,11 +20,21 @@ class TrackRepository extends EntityRepository
     }
 
     /**
-     * @param int $id
+     * @param int $id Track id
      *
-     * @return Track
+     * @return Track|null
      */
-    public function findWithUrl($id)
+    public function findWithUrlAndTags($id)
     {
+        $builder = $this->createQueryBuilder('track')
+            ->select('track', 'url', 'taggings', 'tag')
+            ->join('track.url', 'url')
+            ->join('track.taggings', 'taggings')
+            ->join('taggings.tag', 'tag')
+            ->where('track.id = :id')
+            ->setParameter('id', $id)
+        ;
+
+        return $builder->getQuery()->getResult();
     }
 }

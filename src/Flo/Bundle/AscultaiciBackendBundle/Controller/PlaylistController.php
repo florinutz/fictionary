@@ -2,6 +2,7 @@
 
 namespace Flo\Bundle\AscultaiciBackendBundle\Controller;
 
+use Flo\Bundle\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -10,15 +11,10 @@ use Flo\Bundle\AscultaiciBackendBundle\Form\PlaylistType;
 
 class PlaylistController extends Controller
 {
-    public function indexAction()
+    public function listAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('FloAscultaiciBundle:Playlist')->findAll();
-
-        return $this->render('FloAscultaiciBackendBundle:Playlist:index.html.twig', array(
-            'entities' => $entities,
-        ));
+        $playlists = $this->get('flo_ascultaici.handler.playlist.read')->findByUser($this->getCurrentUser());
+        return $this->render('FloAscultaiciBackendBundle:Playlist:list.html.twig', ['entities' => $playlists]);
     }
 
     public function createAction(Request $request)
@@ -32,7 +28,7 @@ class PlaylistController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('ascultaici_playlist_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('ascultaici_playlist_show', array('slug' => $entity->getSlug())));
         }
 
         return $this->render('FloAscultaiciBackendBundle:Playlist:new.html.twig', array(
@@ -76,43 +72,40 @@ class PlaylistController extends Controller
     }
 
     /**
-     * Finds and displays a Playlist entity.
-     *
+     * Finds and displays a Playlist.
      */
-    public function showAction($id)
+    public function showAction($slug)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('FloAscultaiciBundle:Playlist')->find($id);
+        $currentUser = $this->getCurrentUser();
+        $entity = $this->get('flo_ascultaici.handler.playlist.read')->findOneWithTracks($currentUser, $slug);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Playlist entity.');
+            throw $this->createNotFoundException(sprintf('Unable to find playlist %d.', $slug));
         }
 
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($entity->getSlug());
 
-        return $this->render('FloAscultaiciBackendBundle:Playlist:show.html.twig', array(
+        return $this->render('FloAscultaiciBackendBundle:Playlist:show.html.twig', [
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
-        ));
+            'delete_form' => $deleteForm->createView()
+        ]);
     }
 
     /**
-     * Displays a form to edit an existing Playlist entity.
-     *
+     * @param string $slug
      */
-    public function editAction($id)
+    public function editAction($slug)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('FloAscultaiciBundle:Playlist')->find($id);
+        $currentUser = $this->getCurrentUser();
+        $entity = $this->get('flo_ascultaici.handler.playlist.read')->findOneWithTracks($currentUser, $slug);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Playlist entity.');
+            $message = sprintf('Cannot find playlist "%s"', $slug);
+            throw $this->createNotFoundException($message);
         }
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($entity->getSlug());
 
         return $this->render('FloAscultaiciBackendBundle:Playlist:edit.html.twig', array(
             'entity'      => $entity,
@@ -131,7 +124,7 @@ class PlaylistController extends Controller
     private function createEditForm(Playlist $entity)
     {
         $form = $this->createForm(new PlaylistType(), $entity, array(
-            'action' => $this->generateUrl('ascultaici_playlist_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('ascultaici_playlist_update', array('slug' => $entity->getSlug())),
             'method' => 'PUT',
         ));
 
@@ -141,26 +134,25 @@ class PlaylistController extends Controller
     }
     /**
      * Edits an existing Playlist entity.
-     *
      */
-    public function updateAction(Request $request, $id)
+    public function updateAction(Request $request, $slug)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('FloAscultaiciBundle:Playlist')->find($id);
+        $currentUser = $this->getCurrentUser();
+        $entity = $this->get('flo_ascultaici.handler.playlist.read')->findOneWithTracks($currentUser, $slug);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Playlist entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($entity->getSlug());
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
             $em->flush();
-
-            return $this->redirect($this->generateUrl('ascultaici_playlist_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('ascultaici_playlist_edit', ['slug' => $entity->getSlug()]));
         }
 
         return $this->render('FloAscultaiciBackendBundle:Playlist:edit.html.twig', array(
@@ -171,42 +163,48 @@ class PlaylistController extends Controller
     }
     /**
      * Deletes a Playlist entity.
-     *
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request, $slug)
     {
-        $form = $this->createDeleteForm($id);
+        $form = $this->createDeleteForm($slug);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('FloAscultaiciBundle:Playlist')->find($id);
+            $currentUser = $this->getCurrentUser();
+            $entity = $this->get('flo_ascultaici.handler.playlist.read')->findOneWithTracks($currentUser, $slug);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Playlist entity.');
             }
 
-            $em->remove($entity);
-            $em->flush();
+            $this->get('flo_ascultaici.handler.playlist.save')->delete($entity);
         }
 
         return $this->redirect($this->generateUrl('ascultaici_playlist'));
     }
 
     /**
-     * Creates a form to delete a Playlist entity by id.
+     * Creates a form to delete a Playlist entity by slug.
      *
-     * @param mixed $id The entity id
+     * @param string $slug The entity slug
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm($id)
+    private function createDeleteForm($slug)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('ascultaici_playlist_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('ascultaici_playlist_delete', array('slug' => $slug)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+
+    /**
+     * @return User
+     */
+    protected function getCurrentUser()
+    {
+        return $this->get('security.token_storage')->getToken()->getUser();
     }
 }

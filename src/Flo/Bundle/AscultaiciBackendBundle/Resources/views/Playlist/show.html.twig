@@ -1,40 +1,14 @@
 {% extends '::ascultaici.html.twig' %}
 
 {% block body -%}
-    <h1>Playlist</h1>
+    <h2>{{ entity.title }}</h2>
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ entity.title }}</td>
-            </tr>
-            <tr>
-                <th>Created at</th>
-                <td>{{ entity.createdAt|date('Y-m-d H:i') }}</td>
-            </tr>
-            <tr>
-                <th>Updated at</th>
-                <td>{{ entity.updatedAt|date('Y-m-d H:i') }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <th>Created at</th>
+    <td>{{ entity.createdAt|date('Y-m-d H:i') }}</td>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('ascultaici_playlist') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('ascultaici_playlist_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    <ul class="record_actions">
+        <li><a href="{{ path('ascultaici_playlist') }}">Back to the list</a></li>
+        <li><a href="{{ path('ascultaici_playlist_edit', { 'slug': entity.slug }) }}">Edit</a></li>
+        <li>{{ form(delete_form) }}</li>
+    </ul>
 {% endblock %}

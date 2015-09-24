@@ -1,9 +1,9 @@
 ascultaici_playlist:
     path:     /
-    defaults: { _controller: "FloAscultaiciBackendBundle:Playlist:index" }
+    defaults: { _controller: "FloAscultaiciBackendBundle:Playlist:list" }
 
 ascultaici_playlist_show:
-    path:     /{id}/show
+    path:     /{slug}/show
     defaults: { _controller: "FloAscultaiciBackendBundle:Playlist:show" }
 
 ascultaici_playlist_new:
@@ -16,15 +16,24 @@ ascultaici_playlist_create:
     methods:  POST
 
 ascultaici_playlist_edit:
-    path:     /{id}/edit
+    path:     /{slug}/edit
     defaults: { _controller: "FloAscultaiciBackendBundle:Playlist:edit" }
 
 ascultaici_playlist_update:
-    path:     /{id}/update
+    path:     /{slug}/update
     defaults: { _controller: "FloAscultaiciBackendBundle:Playlist:update" }
     methods:  [POST, PUT]
 
 ascultaici_playlist_delete:
-    path:     /{id}/delete
+    path:     /{slug}/delete
     defaults: { _controller: "FloAscultaiciBackendBundle:Playlist:delete" }
     methods:  [POST, DELETE]
+
+ascultaici_track_new:
+    path: /{playlistSlug}/add-track
+    defaults: { _controller: "FloAscultaiciBackendBundle:Track:new" }
+
+ascultaici_track_create:
+    path:     /{playlistSlug}/create
+    defaults: { _controller: "FloAscultaiciBackendBundle:Track:create" }
+    methods:  POST

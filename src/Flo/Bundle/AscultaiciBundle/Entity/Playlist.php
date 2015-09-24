@@ -8,6 +8,7 @@ use Flo\Bundle\AscultaiciBundle\Entity\Url\Url;
 use Flo\Bundle\AscultaiciBundle\FloAscultaiciBundle;
 use Flo\Bundle\UserBundle\Entity\User;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Flo\Bundle\AscultaiciBundle\Validator\Constraint as AscultAssert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
@@ -16,6 +17,8 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  * @ORM\Table(name="playlist")
  *
  * @ORM\Entity(repositoryClass="Flo\Bundle\AscultaiciBundle\Repository\PlaylistRepository")
+ *
+ * @UniqueEntity(fields={"slug", "createdBy"}, errorPath="title", message="Playlist already exists for current user")
  *
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
@@ -40,8 +43,8 @@ class Playlist
     /**
      * @var string
      *
-     * @Gedmo\Slug(fields={"title"}, updatable=false, unique=true, separator="-", style="lower")
-     * @ORM\Column(length=128, unique=true)
+     * @Gedmo\Slug(fields={"title"}, updatable=false, updatable=true, unique=true, separator="-", style="lower")
+     * @ORM\Column(length=128, unique=false)
      */
     protected $slug;
 

@@ -6,16 +6,8 @@
     {{ form(edit_form) }}
 
     <ul class="record_actions">
-    <li>
-        <a href="{{ path('ascultaici_track_new', {playlist: entity.id}) }}">
-            Add a track
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('ascultaici_playlist') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+        <li><a href="{{ path('ascultaici_track_new', {playlistSlug: entity.slug}) }}">Add track</a></li>
+        <li><a href="{{ path('ascultaici_playlist') }}">Back to list</a></li>
+        <li>{{ form(delete_form) }}</li>
+    </ul>
 {% endblock %}

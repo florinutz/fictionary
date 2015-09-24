@@ -3,6 +3,7 @@
 namespace Flo\Bundle\AscultaiciBackendBundle\Controller;
 
 use Flo\Bundle\AscultaiciBundle\Entity\Playlist;
+use Flo\Bundle\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -62,7 +63,9 @@ class TrackController extends Controller
     private function createCreateForm(Track $entity, Playlist $playlist)
     {
         $form = $this->createForm(new TrackType(), $entity, array(
-            'action' => $this->generateUrl('ascultaici_track_create', ['playlist' => $playlist->getId()]),
+            'action' => $this->generateUrl('ascultaici_track_create', [
+                'playlistSlug' => $playlist->getId()
+            ]),
             'method' => 'POST',
         ));
 
@@ -73,13 +76,16 @@ class TrackController extends Controller
 
     /**
      * Displays a form to create a new Track entity.
-     * @param Playlist $playlist
+     *
+     * @param string $playlistSlug
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function newAction(Playlist $playlist)
+    public function newAction($playlistSlug)
     {
         $entity = new Track();
+        $currentUser = $this->getCurrentUser();
+        $playlist = $this->get('flo_ascultaici.handler.playlist.read')->findOneWithTracks($currentUser, $playlistSlug);
         $form   = $this->createCreateForm($entity, $playlist);
 
         return $this->render('FloAscultaiciBackendBundle:Track:new.html.twig', array(
@@ -91,13 +97,12 @@ class TrackController extends Controller
 
     /**
      * Finds and displays a Track entity.
-     *
      */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('FloAscultaiciBundle:Track')->findWithUrl($id);
+        $entity = $em->getRepository('FloAscultaiciBundle:Track')->findWithUrlAndTags($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Track entity.');
@@ -222,5 +227,13 @@ class TrackController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+
+    /**
+     * @return User
+     */
+    protected function getCurrentUser()
+    {
+        return $this->get('security.token_storage')->getToken()->getUser();
     }
 }
