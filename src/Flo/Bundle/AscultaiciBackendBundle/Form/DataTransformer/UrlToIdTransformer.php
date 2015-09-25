@@ -60,7 +60,7 @@ class UrlToIdTransformer implements DataTransformerInterface
         $url = $this->urlReadHandler->findOneByUrl($urlString);
 
         if (!$url) {
-            $this->urlSaveHandler->create($urlString);
+            //$this->urlSaveHandler->create($urlString);
             // causes a validation error
             // this message is not shown to the user
             // see the invalid_message option

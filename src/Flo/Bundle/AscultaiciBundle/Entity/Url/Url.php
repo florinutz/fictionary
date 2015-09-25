@@ -4,6 +4,7 @@ namespace Flo\Bundle\AscultaiciBundle\Entity\Url;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Flo\Bundle\AscultaiciBundle\Entity\Tag\UrlTagging;
+use Flo\Bundle\AscultaiciBundle\Repository\Url\UrlRepository;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Flo\Bundle\AscultaiciBundle\Validator\Constraint as AscultAssert;
@@ -16,20 +17,12 @@ use Flo\Bundle\AscultaiciBundle\Entity\Track;
  *
  * @ORM\InheritanceType("SINGLE_TABLE")
  *
- * @ORM\DiscriminatorColumn(
- *   name="type",
- *   type="string",
- *   columnDefinition="ENUM(
-        '\Flo\Bundle\AscultaiciBundle\Repository\Url\UrlRepository::TYPE_YOUTUBE',
-        '\Flo\Bundle\AscultaiciBundle\Repository\Url\UrlRepository::TYPE_SOUNDCLOUD',
-        '\Flo\Bundle\AscultaiciBundle\Repository\Url\UrlRepository::TYPE_MIXCLOUD'
-        ) NOT NULL"
- * )
+ * @ORM\DiscriminatorColumn(name="type", type="string", columnDefinition="ENUM('youtube', 'soundcloud', 'mixcloud') NOT NULL")
  *
  * @ORM\DiscriminatorMap({
- *   \Flo\Bundle\AscultaiciBundle\Repository\Url\UrlRepository::TYPE_YOUTUBE = "Flo\Bundle\AscultaiciBundle\Entity\Url\UrlYoutube",
- *   \Flo\Bundle\AscultaiciBundle\Repository\Url\UrlRepository::TYPE_SOUNDCLOUD = "Flo\Bundle\AscultaiciBundle\Entity\Url\UrlSoundcloud",
- *   \Flo\Bundle\AscultaiciBundle\Repository\Url\UrlRepository::TYPE_MIXCLOUD = "Flo\Bundle\AscultaiciBundle\Entity\Url\UrlMixcloud"
+ *   "youtube" = "Flo\Bundle\AscultaiciBundle\Entity\Url\UrlYoutube",
+ *   "soundcloud" = "Flo\Bundle\AscultaiciBundle\Entity\Url\UrlSoundcloud",
+ *   "mixcloud" = "Flo\Bundle\AscultaiciBundle\Entity\Url\UrlMixcloud"
  * })
  *
  * @ORM\Entity(
@@ -77,6 +70,27 @@ abstract class Url
      * @ORM\Column(length=128, unique=true, nullable=true)
      */
     protected $slug;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="author_name", type="string", length=255, nullable=true)
+     */
+    protected $authorName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="author_url", type="string", length=255, nullable=true)
+     */
+    protected $authorUrl;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="thumbnail_url", type="string", length=255, nullable=true)
+     */
+    protected $thumbnailUrl;
 
     /**
      * @var string
@@ -134,6 +148,11 @@ abstract class Url
      */
     abstract public function setUrl($url);
 
+    /**
+     * @return string
+     */
+    abstract public function getOembedUrl();
+
 
     public function __construct()
     {
@@ -163,6 +182,54 @@ abstract class Url
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthorName()
+    {
+        return $this->authorName;
+    }
+
+    /**
+     * @param string $authorName
+     */
+    public function setAuthorName($authorName)
+    {
+        $this->authorName = $authorName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthorUrl()
+    {
+        return $this->authorUrl;
+    }
+
+    /**
+     * @param string $authorUrl
+     */
+    public function setAuthorUrl($authorUrl)
+    {
+        $this->authorUrl = $authorUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getThumbnailUrl()
+    {
+        return $this->thumbnailUrl;
+    }
+
+    /**
+     * @param string $thumbnailUrl
+     */
+    public function setThumbnailUrl($thumbnailUrl)
+    {
+        $this->thumbnailUrl = $thumbnailUrl;
     }
 
     /**
@@ -301,5 +368,23 @@ abstract class Url
     public function getTaggings()
     {
         return $this->taggings;
+    }
+
+    /**
+     * @return string the type
+     */
+    public function getType()
+    {
+        if ($this instanceof UrlYoutube) {
+            return UrlRepository::TYPE_YOUTUBE;
+        }
+        if ($this instanceof UrlSoundcloud) {
+            return UrlRepository::TYPE_SOUNDCLOUD;
+        }
+        if ($this instanceof UrlMixcloud) {
+            return UrlRepository::TYPE_MIXCLOUD;
+        }
+
+        throw new \LogicException('Url type not (currently?) supported');
     }
 }

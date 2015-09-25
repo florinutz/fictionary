@@ -3,45 +3,44 @@ namespace Flo\Bundle\AscultaiciBackendBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use Flo\Bundle\AscultaiciBundle\Entity\Url\Url;
+use Flo\Bundle\AscultaiciBundle\Repository\Url\UrlMixcloudRepository;
 use Flo\Bundle\AscultaiciBundle\Repository\Url\UrlRepository;
+use Flo\Bundle\AscultaiciBundle\Repository\Url\UrlSoundcloudRepository;
+use Flo\Bundle\AscultaiciBundle\Repository\Url\UrlYoutubeRepository;
 use Flo\Bundle\AscultaiciBundle\Service\AbstractReadHandler;
 
 class UrlReadHandler extends AbstractReadHandler
 {
     /**
-     * @var UrlRepository
+     * @var UrlYoutubeRepository
      */
-    protected $urlRepository;
+    protected $urlYoutubeRepository;
+
+    /**
+     * @var UrlSoundcloudRepository
+     */
+    protected $urlSoundcloudRepository;
+
+    /**
+     * @var UrlMixcloudRepository
+     */
+    protected $urlMixcloudRepository;
 
     /**
      * @param EntityManager $manager
-     * @param UrlRepository $urlRepository
+     * @param UrlYoutubeRepository $urlYoutubeRepository
+     * @param UrlSoundcloudRepository $urlSoundcloudRepository
+     * @param UrlMixcloudRepository $urlMixcloudRepository
      */
     public function __construct(
         EntityManager $manager,
-        UrlRepository $urlRepository
+        UrlYoutubeRepository $urlYoutubeRepository,
+        UrlSoundcloudRepository $urlSoundcloudRepository,
+        UrlMixcloudRepository $urlMixcloudRepository
     ) {
         parent::__construct($manager);
-        $this->urlRepository = $urlRepository;
-    }
-
-    /**
-     * @param $id
-     *
-     * @return null|Url
-     */
-    public function find($id)
-    {
-        return $this->urlRepository->find($id);
-    }
-
-    /**
-     * @param $urlString
-     *
-     * @return null|Url
-     */
-    public function findOneByUrl($urlString)
-    {
-        return $this->urlRepository->findOneBy(['url' => $urlString]);
+        $this->urlYoutubeRepository = $urlYoutubeRepository;
+        $this->urlSoundcloudRepository = $urlSoundcloudRepository;
+        $this->urlMixcloudRepository = $urlMixcloudRepository;
     }
 }

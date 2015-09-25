@@ -17,23 +17,23 @@ class PlaylistSaveHandler extends AbstractSaveHandler
     protected $playlistRepository;
 
     /**
-     * @var UrlSaveHandler
+     * @var TrackRepository
      */
-    private $urlSaveHandler;
+    protected $trackRepository;
 
     /**
      * @param EntityManager $entityManager
-     * @param UrlSaveHandler $urlSaveHandler
      * @param PlaylistRepository $playlistRepository
+     * @param TrackRepository $trackRepository
      */
     public function __construct(
         EntityManager $entityManager,
-        UrlSaveHandler $urlSaveHandler,
-        PlaylistRepository $playlistRepository
+        PlaylistRepository $playlistRepository,
+        TrackRepository $trackRepository
     ) {
         parent::__construct($entityManager);
-        $this->urlSaveHandler = $urlSaveHandler;
         $this->playlistRepository = $playlistRepository;
+        $this->trackRepository = $trackRepository;
     }
 
     /**
@@ -44,6 +44,8 @@ class PlaylistSaveHandler extends AbstractSaveHandler
         if (is_numeric($playlist)) {
             $playlist = $this->getEntityManager()->getReference(Playlist::class, $playlist);
         }
+        $this->trackRepository->deletePlaylistTracks($playlist);
+
         return $this->playlistRepository->delete($playlist);
     }
 

@@ -77,16 +77,16 @@ class PlaylistController extends Controller
     public function showAction($slug)
     {
         $currentUser = $this->getCurrentUser();
-        $entity = $this->get('flo_ascultaici.handler.playlist.read')->findOneWithTracks($currentUser, $slug);
+        $playlist = $this->get('flo_ascultaici.handler.playlist.read')->findOneWithTracks($currentUser, $slug);
 
-        if (!$entity) {
+        if (!$playlist) {
             throw $this->createNotFoundException(sprintf('Unable to find playlist %d.', $slug));
         }
 
-        $deleteForm = $this->createDeleteForm($entity->getSlug());
+        $deleteForm = $this->createDeleteForm($playlist->getSlug());
 
         return $this->render('FloAscultaiciBackendBundle:Playlist:show.html.twig', [
-            'entity'      => $entity,
+            'playlist'      => $playlist,
             'delete_form' => $deleteForm->createView()
         ]);
     }
@@ -161,8 +161,12 @@ class PlaylistController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
+
     /**
      * Deletes a Playlist entity.
+     *
+     * @param Request $request
+     * @param $slug
      */
     public function deleteAction(Request $request, $slug)
     {
@@ -171,13 +175,13 @@ class PlaylistController extends Controller
 
         if ($form->isValid()) {
             $currentUser = $this->getCurrentUser();
-            $entity = $this->get('flo_ascultaici.handler.playlist.read')->findOneWithTracks($currentUser, $slug);
+            $playlist = $this->get('flo_ascultaici.handler.playlist.read')->findOneWithTracks($currentUser, $slug);
 
-            if (!$entity) {
+            if (!$playlist) {
                 throw $this->createNotFoundException('Unable to find Playlist entity.');
             }
 
-            $this->get('flo_ascultaici.handler.playlist.save')->delete($entity);
+            $this->get('flo_ascultaici.handler.playlist.save')->delete($playlist);
         }
 
         return $this->redirect($this->generateUrl('ascultaici_playlist'));

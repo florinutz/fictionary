@@ -29,31 +29,23 @@ class TrackSaveHandler extends AbstractSaveHandler
     protected $playlistRepository;
 
     /**
-     * @var UrlFactory
-     */
-    protected $urlFactory;
-
-    /**
      * @var UrlSaveHandler
      */
-    private $urlSaveHandler;
+    protected $urlSaveHandler;
 
     /**
      * @param EntityManager $entityManager
-     * @param UrlFactory $urlFactory
      * @param UrlSaveHandler $urlSaveHandler
      * @param TrackRepository $trackRepository
      * @param PlaylistRepository $playlistRepository
      */
     public function __construct(
         EntityManager $entityManager,
-        UrlFactory $urlFactory,
         UrlSaveHandler $urlSaveHandler,
         TrackRepository $trackRepository,
         PlaylistRepository $playlistRepository
     ) {
         parent::__construct($entityManager);
-        $this->urlFactory = $urlFactory;
         $this->urlSaveHandler = $urlSaveHandler;
         $this->trackRepository = $trackRepository;
         $this->playlistRepository = $playlistRepository;
@@ -105,8 +97,7 @@ class TrackSaveHandler extends AbstractSaveHandler
         $track = $form->getData();
         $urlString = $form->get('url')->getData();
 
-        $url = $this->urlFactory->generate($urlString);
-        $url = $this->urlSaveHandler->save($url);
+        $url = $this->urlSaveHandler->save($urlString);
 
         if (!$url) {
             throw new \InvalidArgumentException(sprintf('Invalid url "%s"', $urlString));

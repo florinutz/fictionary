@@ -23,26 +23,18 @@ class TrackReadHandler extends AbstractReadHandler
     protected $playlistRepository;
 
     /**
-     * @var UrlRepository
-     */
-    protected $urlRepository;
-
-    /**
      * @param EntityManager $manager
      * @param TrackRepository $trackRepository
      * @param PlaylistRepository $playlistRepository
-     * @param UrlRepository $urlRepository
      */
     public function __construct(
         EntityManager $manager,
         TrackRepository $trackRepository,
-        PlaylistRepository $playlistRepository,
-        UrlRepository $urlRepository
+        PlaylistRepository $playlistRepository
     ) {
         parent::__construct($manager);
         $this->trackRepository = $trackRepository;
         $this->playlistRepository = $playlistRepository;
-        $this->urlRepository = $urlRepository;
     }
 
     /**

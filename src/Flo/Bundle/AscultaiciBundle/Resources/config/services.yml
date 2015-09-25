@@ -43,11 +43,6 @@ services:
         class: Flo\Bundle\AscultaiciBundle\Repository\Tag\UrlTaggingRepository
         arguments: [ Flo\Bundle\AscultaiciBundle\Entity\Tag\UrlTagging ]
 
-    flo_ascultaici.repository.url:
-        parent: flo_fictionary.repository.abstract
-        class: Flo\Bundle\AscultaiciBundle\Repository\Url\UrlRepository
-        arguments: [ Flo\Bundle\AscultaiciBundle\Entity\Url\Url ]
-
     flo_ascultaici.repository.url_mixcloud:
         parent: flo_fictionary.repository.abstract
         class: Flo\Bundle\AscultaiciBundle\Repository\Url\UrlMixcloudRepository
@@ -64,6 +59,12 @@ services:
         arguments: [ Flo\Bundle\AscultaiciBundle\Entity\Url\UrlYoutube ]
 
 
+    # web
+    flo_ascultaici.crawler.url:
+        class: Flo\Bundle\AscultaiciBundle\Service\ApiCrawler
+
+
+
     # validators
 
     flo_ascultaici.validator.url.youtube:
@@ -76,6 +77,14 @@ services:
     flo_ascultaici.factory.url:
         class: Flo\Bundle\AscultaiciBundle\Service\UrlFactory
 
+    # events
+
+    flo_ascultaici.subscriber.url.crawler:
+        class: Flo\Bundle\AscultaiciBackendBundle\Service\Doctrine\Event\CrawlerSubscriber
+        arguments: [ @flo_ascultaici.crawler.url ]
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+
     # handlers
 
     flo_ascultaici.api.youtube:
@@ -86,7 +95,15 @@ services:
         class: Flo\Bundle\AscultaiciBackendBundle\Service\UrlSaveHandler
         arguments:
             - @doctrine.orm.default_entity_manager
-            - @flo_ascultaici.repository.url
+            - @flo_ascultaici.factory.url
+            - @flo_ascultaici.repository.url_youtube
+            - @flo_ascultaici.repository.url_soundcloud
+            - @flo_ascultaici.repository.url_mixcloud
+
+    flo_ascultaici.handler.url.read:
+        class: Flo\Bundle\AscultaiciBackendBundle\Service\UrlReadHandler
+        arguments:
+            - @doctrine.orm.default_entity_manager
             - @flo_ascultaici.repository.url_youtube
             - @flo_ascultaici.repository.url_soundcloud
             - @flo_ascultaici.repository.url_mixcloud
@@ -95,7 +112,6 @@ services:
         class: Flo\Bundle\AscultaiciBackendBundle\Service\TrackSaveHandler
         arguments:
             - @doctrine.orm.default_entity_manager
-            - @flo_ascultaici.factory.url
             - @flo_ascultaici.handler.url.save
             - @flo_ascultaici.repository.track
             - @flo_ascultaici.repository.playlist
@@ -106,14 +122,13 @@ services:
             - @doctrine.orm.default_entity_manager
             - @flo_ascultaici.repository.track
             - @flo_ascultaici.repository.playlist
-            - @flo_ascultaici.repository.url
 
     flo_ascultaici.handler.playlist.save:
         class: Flo\Bundle\AscultaiciBackendBundle\Service\PlaylistSaveHandler
         arguments:
             - @doctrine.orm.default_entity_manager
-            - @flo_ascultaici.handler.url.save
             - @flo_ascultaici.repository.playlist
+            - @flo_ascultaici.repository.track
 
     flo_ascultaici.handler.playlist.read:
         class: Flo\Bundle\AscultaiciBackendBundle\Service\PlaylistReadHandler

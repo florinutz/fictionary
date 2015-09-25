@@ -1,70 +1,65 @@
 <?php
 namespace Flo\Bundle\AscultaiciBundle\Service;
 
-use Flo\Bundle\AscultaiciBundle\Entity\Song;
-use Flo\Bundle\AscultaiciBundle\Exception\InvalidTypeException;
-use Flo\Bundle\AscultaiciBundle\Repository\SongRepository;
+use Flo\Bundle\AscultaiciBundle\Entity\Url\Url;
+use Flo\Bundle\AscultaiciBundle\Entity\Url\UrlMixcloud;
+use Flo\Bundle\AscultaiciBundle\Entity\Url\UrlSoundcloud;
+use Flo\Bundle\AscultaiciBundle\Entity\Url\UrlYoutube;
 use Flo\Bundle\AscultaiciBundle\Service\Api\Adapter\ApiProviderInterface;
 
 class ApiCrawler
 {
-    // http://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=2Iueu1944TY&format=json
-    // http://soundcloud.com/oembed?format=json&url=http://soundcloud.com/forss/flickermood
-    // https://www.mixcloud.com/oembed/?url=https%3A//www.mixcloud.com/spartacus/party-time/&format=json
+    const OEMBED_YOUTUBE = 'http://www.youtube.com/oembed?format=json&url=%s';
+    const OEMBED_SOUNDCLOUD = 'http://soundcloud.com/oembed?url=%s&format=json';
+    const OEMBED_MIXCLOUD = 'https://www.mixcloud.com/oembed/?url=%s&format=json';
 
     /**
-     * @var SongRepository
-     */
-    protected $songRepo;
-
-    /**
-     * @param SongRepository $songRepo
-     */
-    public function __construct(SongRepository $songRepo)
-    {
-        $this->songRepo = $songRepo;
-    }
-
-
-    /**
-     * Looks up for info about the $song
+     * Looks up info about the $url
      *
-     * @param Song $song
+     * @param Url $url
      *
      * @return mixed
      */
-    public function lookUp(Song $song)
+    public function oembedFill(Url $url)
     {
-        $url = $song->getUrl();
-        $parser = $this->getApiParserFor($url);
+        $json = file_get_contents($url->getOembedUrl());
 
-        return $parser->oembed($url);
-    }
+        $array = json_decode($json, true);
 
-    /**
-     * @param string $sourceUrl
-     *
-     * @return ApiProviderInterface
-     */
-    protected function getApiParserFor($sourceUrl)
-    {
-        //$type = $this->getType($sourceUrl);
-    }
-
-    protected function getType($sourceUrl)
-    {
-        $map = [
-            'youtube.com' => static::TYPE_YOUTUBE,
-            'soundcloud.com' => static::TYPE_SOUNDCLOUD,
-            'mixcloud.com' => static::TYPE_MIXCLOUD
-        ];
-
-        $host = parse_url($sourceUrl, PHP_URL_HOST);
-
-        if (!array_key_exists($host, $map)) {
-            throw new InvalidTypeException("Unknown host $host");
+        if (isset($array['title'])) {
+            $url->setTitle($array['title']);
         }
 
-        return $map[$host];
+        if (isset($array['author_name'])) {
+            $url->setAuthorName($array['author_name']);
+        }
+
+        if (isset($array['author_url'])) {
+            $url->setAuthorUrl($array['author_url']);
+        }
+
+        if ($url instanceof UrlYoutube) {
+            if (isset($array['thumbnail_url'])) {
+                $url->setThumbnailUrl($array['thumbnail_url']);
+            }
+        }
+
+        if ($url instanceof UrlSoundcloud) {
+            if (isset($array['description'])) {
+                $url->setDescription($array['description']);
+            }
+
+            if (isset($array['thumbnail_url'])) {
+                $url->setThumbnailUrl($array['thumbnail_url']);
+            }
+        }
+
+        if ($url instanceof UrlMixcloud) {
+            if (isset($array['image'])) {
+                $url->setImageUrl($array['image']);
+            }
+        }
+
+        return;
     }
 }

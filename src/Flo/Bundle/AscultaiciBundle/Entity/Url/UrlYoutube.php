@@ -3,6 +3,7 @@
 namespace Flo\Bundle\AscultaiciBundle\Entity\Url;
 
 use Doctrine\ORM\Mapping as ORM;
+use Flo\Bundle\AscultaiciBundle\Service\ApiCrawler;
 use Symfony\Component\Validator\Constraints as Assert;
 use Flo\Bundle\AscultaiciBundle\Validator\Constraint as AscultAssert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
@@ -58,5 +59,13 @@ class UrlYoutube extends Url
     public function setIdentifier($identifier)
     {
         $this->identifier = $identifier;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOembedUrl()
+    {
+        return sprintf(ApiCrawler::OEMBED_YOUTUBE, $this->getUrl());
     }
 }

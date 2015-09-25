@@ -3,9 +3,9 @@ namespace Flo\Bundle\AscultaiciBundle\Tests\Service;
 
 use Flo\Bundle\AscultaiciBundle\Entity\Url\UrlMixcloud;
 use Flo\Bundle\AscultaiciBundle\Entity\Url\UrlSoundcloud;
+use Flo\Bundle\AscultaiciBundle\Entity\Url\UrlYoutube;
 use Flo\Bundle\AscultaiciBundle\Repository\Url\UrlRepository;
 use Flo\Bundle\AscultaiciBundle\Service\UrlFactory;
-use Flo\Bundle\AscultaiciBundle\Entity\Url\UrlYoutube;
 
 class UrlFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,13 +18,13 @@ class UrlFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetType()
     {
-        $type = UrlFactory::getType($this->urlYoutube);
+        $type = UrlRepository::getType($this->urlYoutube);
         $this->assertTrue($type == UrlRepository::TYPE_YOUTUBE, 'Youtube type not recognized');
 
-        $type = UrlFactory::getType($this->urlSoundcloud);
+        $type = UrlRepository::getType($this->urlSoundcloud);
         $this->assertTrue($type == UrlRepository::TYPE_SOUNDCLOUD, 'Soundcloud type not recognized');
 
-        $type = UrlFactory::getType($this->urlMixcloud);
+        $type = UrlRepository::getType($this->urlMixcloud);
         $this->assertTrue($type == UrlRepository::TYPE_MIXCLOUD, 'Mixcloud type not recognized');
     }
 

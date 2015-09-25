@@ -4,6 +4,7 @@ namespace Flo\Bundle\AscultaiciBackendBundle\Controller;
 
 use Flo\Bundle\AscultaiciBundle\Entity\Playlist;
 use Flo\Bundle\UserBundle\Entity\User;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -30,6 +31,7 @@ class TrackController extends Controller
      * Creates a new Track entity.
      * @param Request $request
      * @param Playlist $playlist
+     * @ParamConverter("playlist", options={"mapping": {"playlistSlug": "slug"}})
      */
     public function createAction(Request $request, Playlist $playlist)
     {
@@ -38,35 +40,30 @@ class TrackController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $trackSaveHandler = $this->get('flo_ascultaici.handler.track.save');
-            $trackSaveHandler->createFromForm($form, $playlist);
-            $em = $this->getDoctrine()->getManager();
-            $entity->setPlaylist($playlist);
-            $em->persist($entity);
-            $em->flush();
+            $track = $this->get('flo_ascultaici.handler.track.save')->createFromForm($form, $playlist);
+            $this->addFlash('notice', sprintf('Added track %d', $track->getId()));
 
-            return $this->redirect($this->generateUrl('ascultaici_track_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('ascultaici_playlist_show', array('slug' => $playlist->getSlug())));
         }
 
         return $this->render('FloAscultaiciBackendBundle:Track:new.html.twig', array(
             'entity' => $entity,
+            'playlist' => $playlist,
             'form'   => $form->createView(),
         ));
     }
 
     /**
-     * @param Track $entity The entity
+     * @param Track $track The entity
      * @param Playlist $playlist
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Track $entity, Playlist $playlist)
+    private function createCreateForm(Track $track, Playlist $playlist)
     {
-        $form = $this->createForm(new TrackType(), $entity, array(
-            'action' => $this->generateUrl('ascultaici_track_create', [
-                'playlistSlug' => $playlist->getId()
-            ]),
-            'method' => 'POST',
+        $form = $this->createForm(new TrackType(), $track, array(
+            'action' => $this->generateUrl('ascultaici_track_create', ['playlistSlug' => $playlist->getSlug()]),
+            'method' => 'POST'
         ));
 
         $form->add('submit', 'submit', array('label' => 'Create'));

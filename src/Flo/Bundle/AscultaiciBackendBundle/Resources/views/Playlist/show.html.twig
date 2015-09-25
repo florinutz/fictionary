@@ -1,14 +1,27 @@
 {% extends '::ascultaici.html.twig' %}
 
 {% block body -%}
-    <h2>{{ entity.title }}</h2>
+    <h2>{{ playlist.title }}</h2>
 
-    <th>Created at</th>
-    <td>{{ entity.createdAt|date('Y-m-d H:i') }}</td>
+    <p>{{ playlist.createdAt|date('Y-m-d H:i') }}</p>
 
-    <ul class="record_actions">
-        <li><a href="{{ path('ascultaici_playlist') }}">Back to the list</a></li>
-        <li><a href="{{ path('ascultaici_playlist_edit', { 'slug': entity.slug }) }}">Edit</a></li>
-        <li>{{ form(delete_form) }}</li>
+    <ul class="flash-message-notice">
+        {% for flashMessage in app.session.flashbag.get('notice') %}
+            <li>{{ flashMessage }}</li>
+        {% endfor %}
     </ul>
+
+    <div id="tracks">
+        <ul class="list">
+            {% for track in playlist.tracks %}
+            <li><a href="{{ track.url.url }}">{{ track.url.url }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="actions">
+        <a href="{{ path('ascultaici_playlist') }}">Back to the playlists</a>,
+        <a href="{{ path('ascultaici_playlist_edit', { 'slug': playlist.slug }) }}">Edit</a>,
+        {{ form(delete_form) }}
+    </div>
 {% endblock %}

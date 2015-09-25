@@ -3,6 +3,7 @@
 namespace Flo\Bundle\AscultaiciBundle\Entity\Url;
 
 use Doctrine\ORM\Mapping as ORM;
+use Flo\Bundle\AscultaiciBundle\Service\ApiCrawler;
 use Symfony\Component\Validator\Constraints as Assert;
 use Flo\Bundle\AscultaiciBundle\Validator\Constraint as AscultAssert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
@@ -84,5 +85,13 @@ class UrlSoundcloud extends Url
     public function setTrack($track)
     {
         $this->track = $track;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOembedUrl()
+    {
+        return sprintf(ApiCrawler::OEMBED_SOUNDCLOUD, $this->getUrl());
     }
 }

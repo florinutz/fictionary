@@ -37,4 +37,17 @@ class TrackRepository extends EntityRepository
 
         return $builder->getQuery()->getResult();
     }
+
+    /**
+     * @param Playlist|int $playlist
+     */
+    public function deletePlaylistTracks($playlist)
+    {
+        return $this->getEntityManager()->createQueryBuilder()
+            ->delete('FloAscultaiciBundle:Track', 'track')
+            ->where('track.playlist = :playlist')
+            ->getQuery()
+            ->execute(['playlist' => $playlist])
+        ;
+    }
 }
