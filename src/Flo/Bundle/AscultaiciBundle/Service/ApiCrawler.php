@@ -10,8 +10,8 @@ use Flo\Bundle\AscultaiciBundle\Service\Api\Adapter\ApiProviderInterface;
 class ApiCrawler
 {
     const OEMBED_YOUTUBE = 'http://www.youtube.com/oembed?format=json&url=%s';
-    const OEMBED_SOUNDCLOUD = 'http://soundcloud.com/oembed?url=%s&format=json';
-    const OEMBED_MIXCLOUD = 'https://www.mixcloud.com/oembed/?url=%s&format=json';
+    const OEMBED_SOUNDCLOUD = 'http://soundcloud.com/oembed?format=json&url=%s';
+    const OEMBED_MIXCLOUD = 'https://www.mixcloud.com/oembed/?format=json&url=%s';
 
     /**
      * Looks up info about the $url
