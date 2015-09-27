@@ -3,7 +3,7 @@ ascultaici_track:
     defaults: { _controller: "FloAscultaiciBackendBundle:Track:index" }
 
 ascultaici_track_show:
-    path:     /{id}/show
+    path:     /{playlistSlug}/{trackSlug}
     defaults: { _controller: "FloAscultaiciBackendBundle:Track:show" }
 
 ascultaici_track_edit:
@@ -16,6 +16,6 @@ ascultaici_track_update:
     methods:  [POST, PUT]
 
 ascultaici_track_delete:
-    path:     /{id}/delete
+    path:     /{playlistSlug}/{trackSlug}/delete
     defaults: { _controller: "FloAscultaiciBackendBundle:Track:delete" }
     methods:  [POST, DELETE]

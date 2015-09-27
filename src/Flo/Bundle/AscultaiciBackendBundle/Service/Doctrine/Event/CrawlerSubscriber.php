@@ -33,6 +33,11 @@ class CrawlerSubscriber implements EventSubscriber
         if ($entity instanceof Url) {
             $this->crawler->oembedFill($entity);
         }
+        if ($entity instanceof Track) {
+            if (!$entity->getTitle()) {
+                $entity->setTitle($entity->getUrl()->getTitle());
+            }
+        }
     }
 
 }

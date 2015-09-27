@@ -94,21 +94,22 @@ class TrackController extends Controller
 
     /**
      * Finds and displays a Track entity.
+     * @param string $playlistSlug
+     * @param string $trackSlug
      */
-    public function showAction($id)
+    public function showAction($playlistSlug, $trackSlug)
     {
         $em = $this->getDoctrine()->getManager();
+        $track = $em->getRepository('FloAscultaiciBundle:Track')->findWithUrlAndTags($playlistSlug, $trackSlug);
 
-        $entity = $em->getRepository('FloAscultaiciBundle:Track')->findWithUrlAndTags($id);
-
-        if (!$entity) {
+        if (!$track) {
             throw $this->createNotFoundException('Unable to find Track entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($playlistSlug, $trackSlug);
 
         return $this->render('FloAscultaiciBackendBundle:Track:show.html.twig', array(
-            'entity'      => $entity,
+            'entity'      => $track,
             'delete_form' => $deleteForm->createView(),
         ));
     }
@@ -189,37 +190,41 @@ class TrackController extends Controller
      * Deletes a Track entity.
      *
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request, $playlistSlug, $trackSlug)
     {
-        $form = $this->createDeleteForm($id);
+        $form = $this->createDeleteForm($playlistSlug, $trackSlug);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('FloAscultaiciBundle:Track')->find($id);
+            $track = $em->getRepository('FloAscultaiciBundle:Track')->findWithUrlAndTags($playlistSlug, $trackSlug);
 
-            if (!$entity) {
+            if (!$track) {
                 throw $this->createNotFoundException('Unable to find Track entity.');
             }
 
-            $em->remove($entity);
+            $em->remove($track);
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('ascultaici_track'));
+        return $this->redirect($this->generateUrl('ascultaici_playlist_show', ['slug' => $playlistSlug]));
     }
 
     /**
-     * Creates a form to delete a Track entity by id.
+     * Creates a form to delete a Track.
      *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
+     * @param string $playlistSlug
+     * @param string $trackSlug
      */
-    private function createDeleteForm($id)
+    private function createDeleteForm($playlistSlug, $trackSlug)
     {
+        $action = $this->generateUrl('ascultaici_track_delete', [
+            'playlistSlug' => $playlistSlug,
+            'trackSlug' => $trackSlug
+        ]);
+
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('ascultaici_track_delete', array('id' => $id)))
+            ->setAction($action)
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()

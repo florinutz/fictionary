@@ -5,6 +5,7 @@ use Doctrine\ORM\EntityRepository;
 use Flo\Bundle\AscultaiciBundle\Entity\Playlist;
 use Flo\Bundle\AscultaiciBundle\Entity\Track;
 use Flo\Bundle\AscultaiciBundle\Entity\Url\Url;
+use Flo\Bundle\UserBundle\Entity\User;
 
 class TrackRepository extends EntityRepository
 {
@@ -20,22 +21,31 @@ class TrackRepository extends EntityRepository
     }
 
     /**
-     * @param int $id Track id
+     * @param string $playlistSlug
+     * @param string $trackSlug
      *
      * @return Track|null
+     *
      */
-    public function findWithUrlAndTags($id)
+    public function findWithUrlAndTags($playlistSlug, $trackSlug)
     {
         $builder = $this->createQueryBuilder('track')
-            ->select('track', 'url', 'taggings', 'tag')
+            ->select('track', 'playlist', 'url', 'taggings', 'tag')
             ->join('track.url', 'url')
-            ->join('track.taggings', 'taggings')
-            ->join('taggings.tag', 'tag')
-            ->where('track.id = :id')
-            ->setParameter('id', $id)
+            ->join('track.playlist', 'playlist')
+            ->leftJoin('track.taggings', 'taggings')
+            ->leftJoin('taggings.tag', 'tag')
+
+            ->where('track.slug = :trackSlug')
+            ->andWhere('playlist.slug = :playlistSlug')
+
+            ->setParameters([
+                'playlistSlug' => $playlistSlug,
+                'trackSlug' => $trackSlug
+            ])
         ;
 
-        return $builder->getQuery()->getResult();
+        return $builder->getQuery()->getOneOrNullResult();
     }
 
     /**

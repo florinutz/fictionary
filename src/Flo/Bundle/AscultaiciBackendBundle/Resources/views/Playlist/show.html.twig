@@ -14,7 +14,11 @@
     <div id="tracks">
         <ul class="list">
             {% for track in playlist.tracks %}
-            <li><a href="{{ track.url.url }}">{{ track.url.url }}</a></li>
+            <li>
+                <a href="{{ path('ascultaici_track_show', { 'playlistSlug': playlist.slug, 'trackSlug': track.slug }) }}">
+                    {{ track.url.title }}
+                </a>
+            </li>
             {% endfor %}
         </ul>
     </div>

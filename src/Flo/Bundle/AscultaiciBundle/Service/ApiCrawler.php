@@ -10,7 +10,9 @@ use Flo\Bundle\AscultaiciBundle\Service\Api\Adapter\ApiProviderInterface;
 class ApiCrawler
 {
     const OEMBED_YOUTUBE = 'http://www.youtube.com/oembed?format=json&url=%s';
+
     const OEMBED_SOUNDCLOUD = 'http://soundcloud.com/oembed?format=json&url=%s';
+
     const OEMBED_MIXCLOUD = 'https://www.mixcloud.com/oembed/?format=json&url=%s';
 
     /**
@@ -22,7 +24,18 @@ class ApiCrawler
      */
     public function oembedFill(Url $url)
     {
-        $json = file_get_contents($url->getOembedUrl());
+        try {
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_RETURNTRANSFER => 1,
+                CURLOPT_URL => $url->getOembedUrl(),
+                CURLOPT_USERAGENT => 'Ascultaici'
+            ));
+            $json = curl_exec($curl);
+            curl_close($curl);
+        }
+        catch (\Exception $e) {
+        }
 
         $array = json_decode($json, true);
 
