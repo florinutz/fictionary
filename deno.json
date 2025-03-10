@@ -17,6 +17,7 @@
         "@std/fs": "jsr:@std/fs@^1.0.14",
         "@std/fmt": "jsr:@std/fmt@^1.0.6",
         "@std/log": "jsr:@std/log@^0.224.14",
+        "chalk": "npm:chalk@5",
         "$src/": "./src/",
         "$tests/": "./tests/",
         "zod": "https://deno.land/x/zod@v3.24.2/mod.ts"
