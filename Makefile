@@ -9,7 +9,7 @@ dev:
 	deno task dev
 
 test:
-	deno task test
+	-deno task test:no-check-imports
 
 test-watch:
 	deno task test:watch

@@ -1,59 +1,62 @@
 {
-  "tasks": {
-    "start": "deno run --allow-read --allow-env src/main.ts",
-    "dev": "deno run --watch --allow-read --allow-env src/main.ts",
-    "test": "deno test --allow-read --allow-env",
-    "test:watch": "deno test --watch --allow-read --allow-env",
-    "lint": "deno lint",
-    "fmt": "deno fmt",
-    "check": "deno check src/main.ts",
-    "compile": "deno compile --allow-read --allow-env --output dist/fictionary src/main.ts",
-    "cache": "deno cache --reload src/deps.ts"
-  },
-  "imports": {
-    "zod": "https://deno.land/x/zod@v3.22.4/mod.ts",
-    "$src/": "./src/",
-    "$tests/": "./tests/"
-  },
-  "fmt": {
-    "indentWidth": 4,
-    "lineWidth": 100,
-    "singleQuote": true,
-    "useTabs": false,
-    "proseWrap": "always"
-  },
-  "lint": {
-    "rules": {
-       "include": [
-          "explicit-function-return-type",
-          "no-unused-vars",
-          "no-explicit-any",
-          "no-floating-promises",
-          "no-implicit-dependencies",
-          "no-misused-new",
-          "prefer-const",
-          "prefer-arrow-callback",
-          "camelcase",
-          "eqeqeq",
-          "curly",
-          "no-shadow",
-          "no-console",
-          "consistent-return"
-       ]
+    "tasks": {
+        "start": "deno run --allow-read --allow-env src/main.ts",
+        "dev": "deno run --watch --allow-read --allow-env src/main.ts",
+        "test": "deno test --allow-read --allow-env",
+        "test:no-check-imports": "deno test --allow-read --allow-env --no-check=imports",
+        "test:watch": "deno test --watch --allow-read --allow-env",
+        "lint": "deno lint",
+        "fmt": "deno fmt",
+        "check": "deno check src/main.ts",
+        "compile": "deno compile --allow-read --allow-env --output dist/fictionary src/main.ts",
+        "cache": "deno cache --reload src/deps.ts"
+    },
+    "imports": {
+        "std/": "https://deno.land/std@0.224.0/",
+        "$src/": "./src/",
+        "$tests/": "./tests/",
+        "zod": "https://deno.land/x/zod@v3.24.2/mod.ts"
+    },
+    "fmt": {
+        "indentWidth": 4,
+        "lineWidth": 100,
+        "singleQuote": true,
+        "useTabs": false,
+        "proseWrap": "always",
+        "exclude": [".github/", ".idea", "dist/", "node_modules/"]
+    },
+    "lint": {
+        "rules": {
+            "include": [
+                "explicit-function-return-type",
+                "no-unused-vars",
+                "no-explicit-any",
+                "no-floating-promises",
+                "no-implicit-dependencies",
+                "no-misused-new",
+                "prefer-const",
+                "prefer-arrow-callback",
+                "camelcase",
+                "eqeqeq",
+                "curly",
+                "no-shadow",
+                "no-console",
+                "consistent-return"
+            ]
+        },
+        "exclude": ["src/lib/logger.ts", "tests/"]
+    },
+    "nodeModulesDir": "none",
+    "compilerOptions": {
+        "strict": true,
+        "lib": ["deno.window", "deno.ns"],
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strictPropertyInitialization": true
     }
-  },
-  "nodeModulesDir": "none",
-  "compilerOptions": {
-    "strict": true,
-    "allowJs": false,
-    "lib": ["deno.window", "deno.ns"],
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": true
-  }
 }

@@ -2,7 +2,7 @@
  * General utility functions for the application
  */
 
-import { logger } from "./logger.ts";
+import { logger } from './logger.ts';
 
 /**
  * Retries a function until it succeeds or reaches the maximum number of retries
@@ -14,20 +14,20 @@ import { logger } from "./logger.ts";
 export async function retry<T>(
     fn: () => Promise<T>,
     maxRetries = 3,
-    delay = 1000
+    delay = 1000,
 ): Promise<T> {
     let lastError: Error | undefined;
-    
+
     for (let attempt = 1; attempt <= maxRetries + 1; attempt++) {
         try {
             return await fn();
         } catch (error) {
             lastError = error instanceof Error ? error : new Error(String(error));
-            
+
             if (attempt <= maxRetries) {
                 logger.warn(
                     `Attempt ${attempt} failed, retrying in ${delay}ms...`,
-                    lastError
+                    lastError,
                 );
                 await new Promise((resolve) => setTimeout(resolve, delay));
                 // Exponential backoff
@@ -35,7 +35,7 @@ export async function retry<T>(
             }
         }
     }
-    
+
     throw lastError;
 }
 
@@ -45,7 +45,7 @@ export async function retry<T>(
  * @returns The formatted number string
  */
 export function formatNumber(num: number): string {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 /**
@@ -58,7 +58,7 @@ export function truncate(str: string, maxLength: number): string {
     if (str.length <= maxLength) {
         return str;
     }
-    return str.slice(0, maxLength - 3) + "...";
+    return str.slice(0, maxLength - 3) + '...';
 }
 
 /**
@@ -67,13 +67,13 @@ export function truncate(str: string, maxLength: number): string {
  * @returns A random string
  */
 export function randomString(length: number): string {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let result = "";
-    
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+
     for (let i = 0; i < length; i++) {
         const randomIndex = Math.floor(Math.random() * chars.length);
         result += chars.charAt(randomIndex);
     }
-    
+
     return result;
 }

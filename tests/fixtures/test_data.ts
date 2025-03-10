@@ -23,13 +23,13 @@ export const numberTestData = {
  * Helper function to create a mock console for testing output
  * @returns A mock console object with captured output
  */
-export function createMockConsole(): { 
-    log: (message: string) => void; 
+export function createMockConsole(): {
+    log: (message: string) => void;
     getOutput: () => string[];
     clear: () => void;
 } {
     const output: string[] = [];
-    
+
     return {
         log: (message: string): void => {
             output.push(message);

@@ -3,7 +3,8 @@
  * This module provides a command to add two numbers
  */
 
-import { Command } from "../deps.ts";
+import { Command } from '../deps.ts';
+import { logger } from '../lib/logger.ts';
 
 /**
  * Adds two numbers and returns the result
@@ -19,9 +20,9 @@ export function add(a: number, b: number): number {
  * Add command definition
  */
 export const addCommand = new Command()
-    .name("add")
-    .description("Add two numbers")
-    .arguments("<a:number> <b:number>")
+    .name('add')
+    .description('Add two numbers')
+    .arguments('<a:number> <b:number>')
     .action((_, a: number, b: number) => {
-        console.log(`${a} + ${b} = ${add(a, b)}`);
+        logger.info(`${a} + ${b} = ${add(a, b)}`);
     });

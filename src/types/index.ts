@@ -10,12 +10,12 @@ export interface AdditionPair {
      * First number
      */
     a: number;
-    
+
     /**
      * Second number
      */
     b: number;
-    
+
     /**
      * Expected result of adding a and b
      */
@@ -30,12 +30,12 @@ export interface AppConfig {
      * Debug mode flag
      */
     debug: boolean;
-    
+
     /**
      * Output format
      */
     outputFormat: 'text' | 'json';
-    
+
     /**
      * Maximum number of retries for operations
      */

@@ -3,17 +3,17 @@
  * Provides logging functionality for the application
  */
 
-import { colors, log } from "../deps.ts";
-import { AppConfig, DEFAULT_CONFIG } from "../types/index.ts";
+import { colors } from '../deps.ts';
+import { AppConfig, DEFAULT_CONFIG } from '../types/index.ts';
 
 /**
  * Log levels
  */
 export enum LogLevel {
-    DEBUG = "DEBUG",
-    INFO = "INFO",
-    WARN = "WARN",
-    ERROR = "ERROR",
+    DEBUG = 'DEBUG',
+    INFO = 'INFO',
+    WARN = 'WARN',
+    ERROR = 'ERROR',
 }
 
 /**
@@ -101,7 +101,7 @@ export class Logger {
         if (data) {
             if (data instanceof Error) {
                 console.log(colors.red(data.stack || data.message));
-            } else if (this.config.outputFormat === "json") {
+            } else if (this.config.outputFormat === 'json') {
                 console.log(JSON.stringify(data, null, 2));
             } else {
                 console.log(data);
