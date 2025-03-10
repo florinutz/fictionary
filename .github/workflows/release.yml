@@ -1,0 +1,76 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: Build and Release
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - name: Cache dependencies
+        run: deno task cache
+
+      - name: Run tests
+        run: deno test --allow-read --allow-env
+
+      - name: Build for Linux
+        run: deno compile --allow-read --allow-env --target x86_64-unknown-linux-gnu --output dist/fictionary-linux src/main.ts
+
+      - name: Build for macOS
+        run: deno compile --allow-read --allow-env --target x86_64-apple-darwin --output dist/fictionary-macos src/main.ts
+
+      - name: Build for Windows
+        run: deno compile --allow-read --allow-env --target x86_64-pc-windows-msvc --output dist/fictionary-windows.exe src/main.ts
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Linux Build
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/fictionary-linux
+          asset_name: fictionary-linux
+          asset_content_type: application/octet-stream
+
+      - name: Upload macOS Build
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/fictionary-macos
+          asset_name: fictionary-macos
+          asset_content_type: application/octet-stream
+
+      - name: Upload Windows Build
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/fictionary-windows.exe
+          asset_name: fictionary-windows.exe
+          asset_content_type: application/octet-stream
