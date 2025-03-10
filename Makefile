@@ -1,4 +1,4 @@
-.PHONY: all start dev test test-watch lint format check build clean cache help
+.PHONY: all start dev test test-watch lint format check build clean cache help update-docs
 
 all: lint format check test #build
 
@@ -32,6 +32,9 @@ clean:
 cache:
 	deno task cache
 
+update-docs:
+	@./scripts/update-docs.sh
+
 help:
 	@echo "Available targets:"
 	@echo "  start        - Run the application"
@@ -44,5 +47,6 @@ help:
 	@echo "  build        - Build executable"
 	@echo "  clean        - Remove build artifacts"
 	@echo "  cache        - Update dependency cache"
+	@echo "  update-docs  - Update documentation from langchain-core and langgraph repositories"
 	@echo "  all          - Run lint, format, check, test, and build"
 	@echo "  help         - Show this help message"
