@@ -2,10 +2,10 @@
  * Integration tests for the CLI application
  */
 
-import { assertEquals } from '../../src/deps.ts';
-import { createMockConsole, numberTestData } from '../fixtures/test_data.ts';
-import { add } from '../../src/commands/add.ts';
-import { logger } from '../../src/lib/logger.ts';
+import { assertEquals } from '$src/deps.ts';
+import { createMockConsole, numberTestData } from '$tests/fixtures/test_data.ts';
+import { add } from '$src/commands/add.ts';
+import { logger } from '$src/lib/logger.ts';
 
 // Mock console for testing output
 const mockConsole = createMockConsole();

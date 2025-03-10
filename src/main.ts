@@ -3,11 +3,11 @@
  * This file sets up the CLI command structure and handles execution
  */
 
-import { Command } from './deps.ts';
-import { addCommand } from './commands/index.ts';
+import { Command } from '$src/deps.ts';
+import { addCommand } from '$src/commands/index.ts';
 
 // Re-export the add function for backward compatibility
-export { add } from './commands/add.ts';
+export { add } from '$src/commands/add.ts';
 
 // Create the main CLI command
 const cli = new Command()

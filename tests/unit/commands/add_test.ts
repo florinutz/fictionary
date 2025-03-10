@@ -2,8 +2,8 @@
  * Unit tests for the add command module
  */
 
-import { assertEquals } from '../../../src/deps.ts';
-import { add } from '../../../src/commands/add.ts';
+import { assertEquals } from '$src/deps.ts';
+import { add } from '$src/commands/add.ts';
 
 Deno.test('add function', async (t) => {
     await t.step('adds two positive numbers', () => {

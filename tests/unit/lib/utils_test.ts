@@ -2,8 +2,8 @@
  * Unit tests for utility functions
  */
 
-import { assertEquals, assertExists } from '../../../src/deps.ts';
-import { formatNumber, randomString, truncate } from '../../../src/lib/utils.ts';
+import { assertEquals, assertExists } from '$src/deps.ts';
+import { formatNumber, randomString, truncate } from '$src/lib/utils.ts';
 
 Deno.test('utils module', async (t) => {
     await t.step('formatNumber formats numbers with commas', () => {
