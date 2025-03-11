@@ -1,21 +1,52 @@
 {
   "version": "4",
   "specifiers": {
+    "jsr:@cliffy/command@^1.0.0-rc.7": "1.0.0-rc.7",
+    "jsr:@cliffy/flags@1.0.0-rc.7": "1.0.0-rc.7",
+    "jsr:@cliffy/internal@1.0.0-rc.7": "1.0.0-rc.7",
+    "jsr:@cliffy/table@1.0.0-rc.7": "1.0.0-rc.7",
     "jsr:@std/assert@^1.0.11": "1.0.11",
     "jsr:@std/fmt@^1.0.5": "1.0.6",
     "jsr:@std/fmt@^1.0.6": "1.0.6",
+    "jsr:@std/fmt@~1.0.2": "1.0.6",
     "jsr:@std/fs@^1.0.11": "1.0.14",
     "jsr:@std/fs@^1.0.14": "1.0.14",
     "jsr:@std/internal@^1.0.5": "1.0.5",
     "jsr:@std/io@~0.225.2": "0.225.2",
     "jsr:@std/log@~0.224.14": "0.224.14",
     "jsr:@std/path@^1.0.8": "1.0.8",
+    "jsr:@std/text@~1.0.7": "1.0.11",
     "npm:@langchain/community@~0.3.34": "0.3.34_@browserbasehq+stagehand@1.14.0__@playwright+test@1.51.0__deepmerge@4.3.1__dotenv@16.4.7__openai@4.86.2___zod@3.24.2___ws@8.18.1__zod@3.24.2__ws@8.18.1_@ibm-cloud+watsonx-ai@1.5.1__@langchain+core@0.3.42___zod@3.24.2___openai@4.86.2____zod@3.24.2____ws@8.18.1__openai@4.86.2___zod@3.24.2___ws@8.18.1_@langchain+core@0.3.42__zod@3.24.2_ibm-cloud-sdk-core@5.3.2__axios@1.8.2_openai@4.86.2__zod@3.24.2__ws@8.18.1_zod@3.24.2_@langchain+core@0.3.42__zod@3.24.2__openai@4.86.2___zod@3.24.2___ws@8.18.1",
     "npm:@langchain/core@~0.3.42": "0.3.42_zod@3.24.2",
     "npm:@langchain/langgraph@~0.2.54": "0.2.54_@langchain+core@0.3.42__zod@3.24.2",
     "npm:chalk@5": "5.4.1"
   },
   "jsr": {
+    "@cliffy/command@1.0.0-rc.7": {
+      "integrity": "1288808d7a3cd18b86c24c2f920e47a6d954b7e23cadc35c8cbd78f8be41f0cd",
+      "dependencies": [
+        "jsr:@cliffy/flags",
+        "jsr:@cliffy/internal",
+        "jsr:@cliffy/table",
+        "jsr:@std/fmt@~1.0.2",
+        "jsr:@std/text"
+      ]
+    },
+    "@cliffy/flags@1.0.0-rc.7": {
+      "integrity": "318d9be98f6a6417b108e03dec427dea96cdd41a15beb21d2554ae6da450a781",
+      "dependencies": [
+        "jsr:@std/text"
+      ]
+    },
+    "@cliffy/internal@1.0.0-rc.7": {
+      "integrity": "10412636ab3e67517d448be9eaab1b70c88eba9be22617b5d146257a11cc9b17"
+    },
+    "@cliffy/table@1.0.0-rc.7": {
+      "integrity": "9fdd9776eda28a0b397981c400eeb1aa36da2371b43eefe12e6ff555290e3180",
+      "dependencies": [
+        "jsr:@std/fmt@~1.0.2"
+      ]
+    },
     "@std/assert@1.0.11": {
       "integrity": "2461ef3c368fe88bc60e186e7744a93112f16fd110022e113a0849e94d1c83c1",
       "dependencies": [
@@ -47,6 +78,9 @@
     },
     "@std/path@1.0.8": {
       "integrity": "548fa456bb6a04d3c1a1e7477986b6cffbce95102d0bb447c67c4ee70e0364be"
+    },
+    "@std/text@1.0.11": {
+      "integrity": "f191fa22590cac8b1cdba6cc4ab97940e720f7cc67b3084e54405b428bf5843d"
     }
   },
   "npm": {
@@ -1089,6 +1123,7 @@
   },
   "workspace": {
     "dependencies": [
+      "jsr:@cliffy/command@^1.0.0-rc.7",
       "jsr:@std/assert@^1.0.11",
       "jsr:@std/fmt@^1.0.6",
       "jsr:@std/fs@^1.0.14",

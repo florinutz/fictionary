@@ -12,6 +12,7 @@
         "cache": "deno cache --reload src/deps.ts"
     },
     "imports": {
+        "@cliffy/command": "jsr:@cliffy/command@^1.0.0-rc.7",
         "@langchain/core": "npm:@langchain/core@^0.3.42",
         "@langchain/community": "npm:@langchain/community@^0.3.34",
         "@langchain/langgraph": "npm:@langchain/langgraph@^0.2.54",

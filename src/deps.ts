@@ -5,7 +5,9 @@ export * as colors from '@std/fmt/colors';
 export * as log from '@std/log';
 export { assertEquals, assertExists } from '@std/assert';
 
-// Third-party dependencies
-export { Command } from 'https://deno.land/x/cliffy@v1.0.0-rc.3/command/mod.ts';
-export { Confirm, Input, Select } from 'https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts';
+// Third party dependencies
+export * from "@langchain/core";
+export * from "@langchain/community";
+export * from "@langchain/langgraph";
+export { Command } from "@cliffy/command";
 export { z } from 'zod';
