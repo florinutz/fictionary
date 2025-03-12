@@ -1,323 +1,427 @@
-# Narrative World Bible Generation: Multi-Agent LangGraph Architecture
+# Narrative World Bible Generation: Simplified Agentic Workflow
 
 ## Overview
 
-This document outlines a high-level design for a LangGraph-based multi-agent system that transforms unstructured input into a comprehensive, rich, and imaginative narrative world bible. The system leverages specialized agents working in concert to analyze, extract, create, and refine elements of a fictional universe, resulting in a cohesive world bible that can serve as the foundation for storytelling, game development, or other creative endeavors.
+This document outlines a simplified, pragmatic approach to generating comprehensive narrative world bibles using [LangGraph](langgraph/concepts/high_level.md). The system transforms unstructured input into a cohesive world bible through an iterative, dialogue-based process with clear human supervision checkpoints. This approach maintains core functionality while reducing complexity, making it ideal for MVP implementations and practical applications in storytelling, game development, or other creative endeavors.
+
+## Core Principles
+
+The workflow is built around four key principles:
+
+### 1. Iterative Dialogue
+
+The system engages in continuous dialogue with human supervisors, bundling questions to efficiently refine the plan and incorporating feedback at defined checkpoints. This ensures the final output aligns with user expectations while leveraging AI capabilities.
+
+### 2. File-Based Memory
+
+All state information is stored on the filesystem, including Q&A files for tracking dialogue history and output files for persistent results. This approach enables easy human intervention and inspection at any point in the process.
+
+### 3. Simplified Roles & Clear Outputs
+
+The workflow uses a reduced number of agent roles focused on essential functions, with clear separation of responsibilities. The final output is a comprehensive Markdown document that serves as the world bible.
+
+### 4. Flexibility in Input
+
+The system supports both structured responses via options and unstructured modifications at any stage, accommodating human creativity throughout the process.
 
 ## System Architecture
 
-The architecture employs a **Hierarchical Supervisor** pattern with specialized agents organized into functional teams. This design balances autonomy and coordination, allowing for both specialized expertise and cohesive integration of world elements.
+The architecture employs a simplified agent structure with clear responsibilities and communication paths:
 
 ```
-                           ┌─────────────────────┐
-                           │  Master Supervisor  │
-                           └──────────┬──────────┘
-                                      │
-                 ┌────────────────────┼────────────────────┐
-                 │                    │                    │
-        ┌────────▼─────────┐ ┌────────▼─────────┐ ┌────────▼─────────┐
-        │  Analysis Team   │ │  Creation Team   │ │ Integration Team │
-        │    Supervisor    │ │    Supervisor    │ │    Supervisor    │
-        └────────┬─────────┘ └────────┬─────────┘ └────────┬─────────┘
-                 │                    │                    │
-        ┌────────┼─────────┐ ┌────────┼─────────┐ ┌────────┼─────────┐
-        │        │         │ │        │         │ │        │         │
-┌───────▼─┐ ┌────▼───┐ ┌──▼───┐ ┌────▼───┐ ┌───▼────┐ ┌───▼────┐ ┌──▼─────┐
-│ Content │ │ Genre  │ │ Theme │ │Character│ │ Setting│ │Narrative│ │Coherence│
-│ Analyzer│ │Detector│ │Extractor│ │ Creator │ │ Creator│ │Assembler│ │ Checker │
-└─────────┘ └────────┘ └───────┘ └─────────┘ └────────┘ └─────────┘ └─────────┘
+                      ┌─────────────────────┐
+                      │  Process Coordinator│
+                      └──────────┬──────────┘
+                                 │
+            ┌────────────────────┼────────────────────┐
+            │                    │                    │
+   ┌────────▼─────────┐ ┌────────▼─────────┐ ┌────────▼─────────┐
+   │  Content Analyst │ │  World Creator   │ │ Document Assembler│
+   └─────────┬────────┘ └─────────┬────────┘ └────────┬─────────┘
+             │                    │                   │
+             └────────────────────┼───────────────────┘
+                                  │
+                         ┌────────▼─────────┐
+                         │  Human Reviewer  │
+                         └──────────────────┘
 ```
 
-### Agent Teams and Roles
+### Simplified Agent Roles
 
-The system is organized into three primary teams, each with a supervisor agent and specialized worker agents:
+The system uses a streamlined set of agents with clear responsibilities:
 
-#### 1. Analysis Team
+#### 1. Process Coordinator
 
-Responsible for processing and understanding the unstructured input data:
+The central orchestrator that manages the overall workflow and facilitates communication:
 
-- **Content Analyzer Agent**: Processes raw input, identifies key elements, and prepares data for further analysis
-- **Genre Detector Agent**: Determines the genre, tone, and style of the content
-- **Theme Extractor Agent**: Identifies core themes, motifs, and philosophical underpinnings
+- **Responsibilities**:
+  - Guides the entire world-building process from start to finish
+  - Manages transitions between workflow stages
+  - Bundles questions for human feedback at key checkpoints
+  - Ensures all components work together coherently
+  - Makes high-level decisions about process flow
+- **Tools**: Workflow management, task prioritization, feedback integration
 
-#### 2. Creation Team
+#### 2. Content Analyst
+
+Responsible for understanding and extracting key information from the input:
+
+- **Input**: Raw unstructured text (stories, notes, descriptions)
+- **Output**: Processed content with identified genre, themes, patterns, and key elements
+- **Responsibilities**:
+  - Analyzes raw input to identify core narrative elements
+  - Determines genre, tone, and stylistic elements
+  - Extracts themes, motifs, and symbolic elements
+  - Identifies cultural and contextual references
+- **Tools**: Document processing, semantic analysis, genre classification, thematic analysis
+
+#### 3. World Creator
 
 Responsible for generating the core elements of the world bible:
 
-- **Character Creator Agent**: Designs and develops characters with rich backgrounds, motivations, and relationships
-- **Setting Creator Agent**: Crafts locations, environments, and their physical and cultural characteristics
-- **World Rules Creator Agent**: Establishes the laws, systems, and mechanics that govern the fictional universe
-- **Timeline Creator Agent**: Develops historical events and chronologies that shape the world
+- **Input**: Analysis from Content Analyst, human feedback
+- **Output**: Cohesive world elements including characters, settings, rules, and timeline
+- **Responsibilities**:
+  - Creates detailed character profiles with backgrounds and relationships
+  - Develops settings with physical and cultural attributes
+  - Establishes consistent world rules and systems
+  - Constructs logical timeline of events
+  - Designs social structures and cultural systems
+- **Tools**: Character generation, setting creation, world-building frameworks, timeline construction
 
-#### 3. Integration Team
+#### 4. Document Assembler
 
-Responsible for assembling, refining, and ensuring the quality of the final world bible:
+Responsible for creating the final world bible document:
 
-- **Narrative Assembler Agent**: Combines all elements into a cohesive narrative structure
-- **Coherence Checker Agent**: Identifies and resolves inconsistencies and contradictions
-- **Enrichment Agent**: Adds depth, nuance, and imaginative details to enhance the world
-- **Format Specialist Agent**: Structures the final output according to world bible conventions
+- **Input**: World elements from World Creator, human feedback
+- **Output**: Comprehensive, well-structured world bible document
+- **Responsibilities**:
+  - Integrates all world elements into a cohesive narrative structure
+  - Checks for consistency and resolves contradictions
+  - Enhances content with additional details and nuance
+  - Formats the document for readability and navigation
+  - Ensures continuity across all elements
+- **Tools**: Document structuring, consistency checking, content enhancement, formatting
 
-### Supervisor Hierarchy
+#### 5. Human Reviewer
 
-The system employs a three-level hierarchy:
+The human participant who provides guidance, feedback, and creative input:
 
-1. **Master Supervisor**: Orchestrates the overall workflow, delegates tasks to team supervisors, and manages the high-level process
-2. **Team Supervisors**: Coordinate specialized agents within their teams, ensure quality of team outputs, and communicate with the Master Supervisor
-3. **Specialized Agents**: Focus on specific tasks within their domain of expertise
+- **Responsibilities**:
+  - Reviews outputs at key checkpoints
+  - Answers bundled questions to guide development
+  - Provides creative direction and preferences
+  - Makes decisions on alternatives presented by the system
+  - Has final approval authority on all content
+- **Interaction Points**:
+  - After initial analysis to confirm direction
+  - During world element creation to shape development
+  - Before final assembly to ensure alignment with vision
+  - After document creation for final approval
 
-## Workflow Process
+## Iterative Dialogue Workflow
 
-The world bible generation process follows these key stages:
+The world bible generation process follows a simplified, iterative approach with clear human checkpoints:
 
-### 1. Input Processing and Analysis
+### 1. Initial Analysis and Planning
 
 ```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│ Unstructured│     │  Document   │     │   Content   │
-│    Input    │────▶│ Processing  │────▶│  Analysis   │
+│ Unstructured│     │   Content   │     │   Initial   │
+│    Input    │────▶│   Analysis  │────▶│  Questions  │
 └─────────────┘     └─────────────┘     └──────┬──────┘
                                                │
                                                ▼
                                         ┌─────────────┐
-                                        │    Genre    │
-                                        │ & Thematic  │
-                                        │  Analysis   │
+                                        │    Human    │
+                                        │   Feedback  │
                                         └─────────────┘
 ```
 
-1. **Input Ingestion**: The system accepts unstructured text input (stories, notes, descriptions, etc.)
-2. **Document Processing**: Content is chunked, embedded, and prepared for analysis
-3. **Content Analysis**: The Analysis Team extracts key information, identifies patterns, and determines the nature of the content
-4. **Genre and Theme Detection**: The system identifies the genre, tone, style, and core themes
+1. **Input Processing**: The Content Analyst processes unstructured text input (stories, notes, descriptions)
+2. **Initial Analysis**: Key information is extracted, including genre, themes, tone, and core elements
+3. **Question Bundling**: The Process Coordinator prepares a set of focused questions about unclear or ambiguous aspects
+4. **First Checkpoint**: Human feedback is collected to confirm direction and fill information gaps
 
-### 2. Element Creation and Development
+**File-Based Memory**:
+- `input.md`: Original unstructured input stored for reference
+- `analysis.json`: Structured analysis results including genre, themes, and key elements
+- `questions_round1.md`: Initial questions for human review
+- `feedback_round1.md`: Human responses to initial questions
 
-```
-                    ┌─────────────┐
-                    │  Creation   │
-                    │ Coordinator │
-                    └──────┬──────┘
-                           │
-         ┌────────────────┼────────────────┐
-         │                │                │
-┌────────▼─────┐  ┌───────▼────────┐  ┌───▼────────────┐
-│  Character   │  │    Setting     │  │   World Rules   │
-│  Generation  │  │   Generation   │  │   Generation    │
-└──────┬───────┘  └───────┬────────┘  └────────┬───────┘
-       │                  │                     │
-       └──────────────────┼─────────────────────┘
-                          │
-                          ▼
-                   ┌─────────────┐
-                   │  Timeline   │
-                   │ Generation  │
-                   └─────────────┘
-```
+**Human Interaction**:
+- Humans review the initial analysis and answer bundled questions
+- Feedback can be provided as direct answers or creative additions
+- The system accommodates both structured (multiple choice) and unstructured (free text) responses
 
-1. **Parallel Element Creation**: The Creation Team works in parallel to generate:
-   - Characters with detailed profiles
-   - Settings and locations with rich descriptions
-   - World rules, systems, and mechanics
-   - Historical timeline and events
-
-2. **Element Enrichment**: Each element is enhanced with details, connections, and nuance
-
-### 3. Integration and Refinement
+### 2. World Element Creation
 
 ```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│   Element   │     │ Consistency │     │ Narrative   │
-│ Integration │────▶│   Checking  │────▶│ Enhancement │
+│   Analysis  │     │    World    │     │  Element    │
+│  & Feedback │────▶│   Creation  │────▶│  Questions  │
 └─────────────┘     └─────────────┘     └──────┬──────┘
                                                │
                                                ▼
                                         ┌─────────────┐
-                                        │    Final    │
-                                        │ Formatting  │
+                                        │    Human    │
+                                        │   Feedback  │
                                         └─────────────┘
 ```
 
-1. **Element Integration**: The Integration Team combines all created elements into a cohesive whole
-2. **Consistency Checking**: The system identifies and resolves contradictions and inconsistencies
-3. **Narrative Enhancement**: The world bible is enriched with additional details and connections
-4. **Final Formatting**: The world bible is structured according to standard conventions
+1. **Element Generation**: The World Creator develops core world elements based on analysis and feedback:
+   - Character profiles with backgrounds and relationships
+   - Settings with physical and cultural attributes
+   - World rules and systems
+   - Timeline of key events
 
-### 4. Human-in-the-Loop Refinement (Optional)
+2. **Element Review**: The Process Coordinator identifies areas needing clarification or creative decisions
+3. **Second Checkpoint**: Human feedback is collected on world elements before final assembly
+
+**File-Based Memory**:
+- `characters.md`: Character profiles and relationships
+- `settings.md`: Locations and environments
+- `world_rules.md`: Systems, mechanics, and laws
+- `timeline.md`: Historical events and chronology
+- `questions_round2.md`: Questions about world elements
+- `feedback_round2.md`: Human responses to element questions
+
+**Human Interaction**:
+- Humans review preliminary world elements and provide feedback
+- The system may present alternative options for key elements
+- Humans can modify any aspect of the created elements
+- Feedback is incorporated directly into the world files
+
+### 3. Document Assembly and Refinement
 
 ```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│   Initial   │     │    Human    │     │  Revised    │
-│ World Bible │────▶│   Feedback  │────▶│ World Bible │
-└─────────────┘     └─────────────┘     └─────────────┘
+│    World    │     │  Document   │     │    Final    │
+│   Elements  │────▶│  Assembly   │────▶│   Review    │
+└─────────────┘     └─────────────┘     └──────┬──────┘
+                                               │
+                                               ▼
+                                        ┌─────────────┐
+                                        │    Human    │
+                                        │   Approval  │
+                                        └─────────────┘
 ```
 
-1. **Human Review**: Users can review the generated world bible
-2. **Feedback Integration**: The system incorporates human feedback
-3. **Iterative Refinement**: The world bible is revised based on feedback
+1. **Document Integration**: The Document Assembler combines all elements into a cohesive world bible
+2. **Consistency Checking**: Contradictions and inconsistencies are identified and resolved
+3. **Formatting and Enhancement**: The document is structured for readability with additional details
+4. **Final Checkpoint**: The complete world bible is presented for human approval
+
+**File-Based Memory**:
+- `world_bible_draft.md`: Initial assembled document
+- `consistency_notes.md`: Identified issues and resolutions
+- `world_bible_final.md`: Final formatted document
+- `questions_final.md`: Any final questions for human review
+- `feedback_final.md`: Final human feedback and approval
+
+**Human Interaction**:
+- Humans review the complete world bible
+- Final modifications can be requested
+- Once approved, the world bible is finalized
+
+### 4. Flexible Input Mechanisms
+
+The system supports two primary modes of human input throughout the process:
+
+#### Structured Options
+
+```
+Question: What type of magic system should exist in this world?
+Options:
+1. Elemental magic tied to natural forces
+2. Ritualistic magic requiring specific components
+3. Innate abilities present in certain bloodlines
+4. No magic, focus on realistic technology instead
+```
+
+- Presents clear choices for key decisions
+- Reduces cognitive load on humans
+- Ensures system can process responses predictably
+- Includes option for "Other" with free text input
+
+#### Unstructured Modifications
+
+```
+Please review the character profile below and make any desired changes:
+
+[Character profile text]
+
+Your modifications:
+```
+
+- Allows for creative freedom and unexpected additions
+- Supports direct editing of any content
+- Accommodates complex ideas that don't fit structured options
+- Enables human creativity to enhance the world
+
+**Implementation**:
+- Each checkpoint includes both structured and unstructured input options
+- Humans can choose their preferred input method
+- The system processes both types of input appropriately
+- All input is stored in the file-based memory system for reference
 
 ## Technical Implementation
 
-### State Schema
+### File-Based Memory System
 
-The system maintains a comprehensive state that tracks the progress of the world bible generation:
+The system uses a simple file-based approach to maintain state and enable easy human intervention:
+
+```
+project/
+├── input/
+│   └── raw_input.md           # Original unstructured input
+├── analysis/
+│   ├── content_analysis.json  # Extracted genre, themes, etc.
+│   ├── questions_round1.md    # Initial questions for human review
+│   └── feedback_round1.md     # Human responses to initial questions
+├── world_elements/
+│   ├── characters.md          # Character profiles
+│   ├── settings.md            # Locations and environments
+│   ├── world_rules.md         # Systems and mechanics
+│   ├── timeline.md            # Historical events
+│   ├── questions_round2.md    # Questions about world elements
+│   └── feedback_round2.md     # Human responses to element questions
+└── output/
+    ├── world_bible_draft.md   # Initial assembled document
+    ├── consistency_notes.md   # Identified issues and resolutions
+    ├── questions_final.md     # Final questions for human review
+    ├── feedback_final.md      # Final human feedback
+    └── world_bible_final.md   # Final approved document
+```
+
+This structure provides several advantages:
+- Easy human inspection and modification at any stage
+- Persistent storage that survives process restarts
+- Clear organization of different types of information
+- Simple version control using standard tools
+- No complex database setup required
+
+### Simplified State Schema
+
+The system maintains a lightweight state that tracks the progress of the world bible generation:
 
 ```typescript
 export const WorldBibleState = z.object({
-  // Input and processing state
-  rawContent: z.array(z.object({
-    content: z.string(),
-    metadata: z.record(z.string()).optional(),
-  })),
-  processedDocuments: z.array(z.object({
-    content: z.string(),
-    chunks: z.array(z.string()).optional(),
-    embedding: z.array(z.number()).optional(),
-    metadata: z.record(z.string()).optional(),
-  })).default([]),
+  // Process tracking
+  currentStage: z.enum([
+    "initialize",
+    "content_analysis", 
+    "human_feedback_round1",
+    "world_creation",
+    "human_feedback_round2",
+    "document_assembly",
+    "human_final_review",
+    "complete"
+  ]).default("initialize"),
 
-  // Analysis results
-  contentAnalysis: z.object({
-    genre: z.string().optional(),
-    setting: z.string().optional(),
-    timeframe: z.string().optional(),
-    toneAndStyle: z.string().optional(),
-    mainThemes: z.array(z.string()).optional(),
-  }).optional(),
+  // File paths for the current process
+  filePaths: z.object({
+    inputFile: z.string().optional(),
+    analysisFile: z.string().optional(),
+    questionsFile: z.string().optional(),
+    feedbackFile: z.string().optional(),
+    outputFile: z.string().optional()
+  }).default({}),
 
-  // World elements
-  characters: z.array(z.object({
-    name: z.string(),
-    description: z.string(),
-    background: z.string().optional(),
-    motivations: z.string().optional(),
-    relationships: z.array(z.object({
-      character: z.string(),
-      relationship: z.string(),
-    })).optional(),
-  })).default([]),
+  // Human interaction tracking
+  humanInteraction: z.object({
+    pendingQuestions: z.array(z.string()).default([]),
+    lastFeedbackTime: z.number().optional(),
+    feedbackIncorporated: z.boolean().default(false)
+  }).default({}),
 
-  settings: z.array(z.object({
-    name: z.string(),
-    description: z.string(),
-    significance: z.string().optional(),
-  })).default([]),
-
-  timeline: z.array(z.object({
-    event: z.string(),
-    timeframe: z.string().optional(),
-    significance: z.string().optional(),
-  })).default([]),
-
-  worldRules: z.array(z.object({
-    name: z.string(),
-    description: z.string(),
-    implications: z.string().optional(),
-  })).default([]),
-
-  // Output
-  worldBible: z.object({
-    title: z.string().optional(),
-    introduction: z.string().optional(),
-    charactersSection: z.string().optional(),
-    settingsSection: z.string().optional(),
-    timelineSection: z.string().optional(),
-    worldRulesSection: z.string().optional(),
-    additionalSections: z.record(z.string()).optional(),
-  }).optional(),
-
-  // Control flow
-  currentTask: z.string().default("initialize"),
-  errors: z.array(z.string()).default([]),
-  messages: z.array(z.object({
-    role: z.enum(["system", "user", "assistant", "tool"]),
-    content: z.string(),
-  })).default([]),
+  // Simple error tracking
+  errors: z.array(z.string()).default([])
 });
 ```
 
 ### Agent Implementation
 
-Each agent in the system is implemented as a LangGraph node with:
-
-1. **Specialized Prompts**: Tailored to the agent's specific role and expertise
-2. **Tool Access**: Access to relevant tools for their domain
-3. **Memory Management**: Appropriate state access and update capabilities
-
-Example implementation of a specialized agent:
+Each agent in the system is implemented as a LangGraph node with simplified functionality:
 
 ```typescript
-const characterCreatorAgent = async (
+const contentAnalystAgent = async (
   state: WorldBibleStateType,
   config: RunnableConfig
 ): Promise<WorldBibleStateType> => {
-  const { contentAnalysis, processedDocuments } = state;
+  // Read input file
+  const inputPath = state.filePaths.inputFile || "input/raw_input.md";
+  const inputContent = await fs.readFile(inputPath, "utf-8");
 
-  // Create a vector store for retrieval
-  const vectorStore = await MemoryVectorStore.fromDocuments(
-    processedDocuments.map(doc => new Document({
-      pageContent: doc.content,
-      metadata: doc.metadata || {},
-    })),
-    new OpenAIEmbeddings()
-  );
-
-  // Create a retriever
-  const retriever = vectorStore.asRetriever();
-
-  // Extract characters using RAG
-  const characterExtractionPrompt = ChatPromptTemplate.fromMessages([
-    ["system", `You are an expert character creator specializing in ${contentAnalysis?.genre || "fiction"}.
-    Create rich, nuanced characters with depth, motivations, and relationships.
-    The content is set in ${contentAnalysis?.setting || "an unknown setting"} with themes of ${contentAnalysis?.mainThemes?.join(", ") || "various themes"}.
-    Extract existing characters from the text and enhance them with additional details.
-    For any underdeveloped characters, expand their profiles with imaginative but fitting details.
-    If the cast of characters seems incomplete, create additional characters that would enrich the world.`],
-    ["human", "Here are some relevant passages: {context}\n\nCreate a comprehensive set of characters for this world."],
+  // Create analysis prompt
+  const analysisPrompt = ChatPromptTemplate.fromMessages([
+    ["system", `You are an expert content analyst specializing in narrative fiction.
+    Analyze the provided content to identify genre, themes, tone, and key elements.
+    Focus on extracting the core components that will be essential for world-building.`],
+    ["human", `Analyze this content and extract key world-building elements:\n\n${inputContent}`],
   ]);
 
   const llm = new ChatOpenAI({
-    temperature: 0.7, // Higher temperature for creative character development
+    temperature: 0.3,
     modelName: "gpt-4",
   });
 
-  const characterSchema = z.object({
-    characters: z.array(z.object({
-      name: z.string().describe("The character's name"),
-      description: z.string().describe("Physical description and personality"),
-      background: z.string().describe("Character's history and background"),
-      motivations: z.string().describe("Character's goals and motivations"),
-      relationships: z.array(z.object({
-        character: z.string().describe("Name of the related character"),
-        relationship: z.string().describe("Description of the relationship"),
-      })).describe("Character's relationships with other characters"),
-    })).describe("List of all characters for this world"),
+  // Define analysis schema
+  const analysisSchema = z.object({
+    genre: z.string().describe("The primary genre of the content"),
+    setting: z.string().describe("The general setting or environment"),
+    themes: z.array(z.string()).describe("Main themes present in the content"),
+    tone: z.string().describe("The overall tone or mood"),
+    keyElements: z.array(z.string()).describe("Important elements for world-building")
   });
 
-  const structuredLLM = llm.withStructuredOutput(characterSchema);
+  const structuredLLM = llm.withStructuredOutput(analysisSchema);
 
-  // Create a RAG chain
-  const ragChain = RunnableSequence.from([
-    {
-      context: retriever.pipe(combineDocuments),
-    },
-    characterExtractionPrompt,
-    structuredLLM,
+  // Generate analysis
+  const analysis = await structuredLLM.invoke(
+    await analysisPrompt.invoke({})
+  );
+
+  // Write analysis to file
+  const analysisPath = "analysis/content_analysis.json";
+  await fs.writeFile(analysisPath, JSON.stringify(analysis, null, 2));
+
+  // Generate questions for human feedback
+  const questionPrompt = ChatPromptTemplate.fromMessages([
+    ["system", `Based on the analysis of the content, generate 3-5 focused questions
+    that will help clarify ambiguous elements or fill in gaps in the world-building information.
+    These questions should address the most important decisions needed to proceed with world creation.`],
+    ["human", `Analysis results: ${JSON.stringify(analysis)}\n\nGenerate focused questions for human feedback.`],
   ]);
 
-  const result = await ragChain.invoke({});
+  const questions = await llm.invoke(await questionPrompt.invoke({}));
 
+  // Write questions to file
+  const questionsPath = "analysis/questions_round1.md";
+  await fs.writeFile(questionsPath, questions.content);
+
+  // Update state
   return {
     ...state,
-    characters: result.characters,
-    currentTask: "create_settings",
+    currentStage: "human_feedback_round1",
+    filePaths: {
+      ...state.filePaths,
+      inputFile: inputPath,
+      analysisFile: analysisPath,
+      questionsFile: questionsPath
+    },
+    humanInteraction: {
+      ...state.humanInteraction,
+      pendingQuestions: questions.content.split("\n").filter(q => q.trim().endsWith("?")),
+      feedbackIncorporated: false
+    }
   };
 };
 ```
 
-### Graph Definition
+### Simplified Graph Definition
 
-The workflow is defined as a LangGraph using the Functional API:
+The workflow is defined as a streamlined LangGraph with clear transitions between stages:
 
 ```typescript
 import { StateGraph } from "@langchain/langgraph";
@@ -332,230 +436,245 @@ export const createWorldBibleGraph = () => {
     },
   });
 
-  // Add team supervisor nodes
-  graph.addNode("masterSupervisor", masterSupervisorAgent);
-  graph.addNode("analysisTeamSupervisor", analysisTeamSupervisorAgent);
-  graph.addNode("creationTeamSupervisor", creationTeamSupervisorAgent);
-  graph.addNode("integrationTeamSupervisor", integrationTeamSupervisorAgent);
-
-  // Add specialized agent nodes
-  graph.addNode("contentAnalyzer", contentAnalyzerAgent);
-  graph.addNode("genreDetector", genreDetectorAgent);
-  graph.addNode("themeExtractor", themeExtractorAgent);
-  graph.addNode("characterCreator", characterCreatorAgent);
-  graph.addNode("settingCreator", settingCreatorAgent);
-  graph.addNode("worldRulesCreator", worldRulesCreatorAgent);
-  graph.addNode("timelineCreator", timelineCreatorAgent);
-  graph.addNode("narrativeAssembler", narrativeAssemblerAgent);
-  graph.addNode("coherenceChecker", coherenceCheckerAgent);
-  graph.addNode("enrichmentAgent", enrichmentAgent);
-  graph.addNode("formatSpecialist", formatSpecialistAgent);
+  // Add agent nodes
+  graph.addNode("processCoordinator", processCoordinatorAgent);
+  graph.addNode("contentAnalyst", contentAnalystAgent);
+  graph.addNode("worldCreator", worldCreatorAgent);
+  graph.addNode("documentAssembler", documentAssemblerAgent);
+  graph.addNode("humanFeedback", humanFeedbackNode);
 
   // Define the edges of the graph
-  graph.addEdge("__start__", "masterSupervisor");
+  graph.addEdge("__start__", "processCoordinator");
 
-  // Master supervisor to team supervisors
+  // Process coordinator manages workflow transitions
   graph.addConditionalEdges(
-    "masterSupervisor",
-    (state) => state.currentTask,
+    "processCoordinator",
+    (state) => state.currentStage,
     {
-      analyze_content: "analysisTeamSupervisor",
-      create_elements: "creationTeamSupervisor",
-      integrate_elements: "integrationTeamSupervisor",
+      initialize: "contentAnalyst",
+      human_feedback_round1: "humanFeedback",
+      world_creation: "worldCreator",
+      human_feedback_round2: "humanFeedback",
+      document_assembly: "documentAssembler",
+      human_final_review: "humanFeedback",
       complete: "__end__",
     }
   );
 
-  // Analysis team supervisor to specialized agents
-  graph.addConditionalEdges(
-    "analysisTeamSupervisor",
-    (state) => state.currentTask,
-    {
-      process_content: "contentAnalyzer",
-      detect_genre: "genreDetector",
-      extract_themes: "themeExtractor",
-      analysis_complete: "masterSupervisor",
-    }
-  );
-
-  // Creation team supervisor to specialized agents
-  graph.addConditionalEdges(
-    "creationTeamSupervisor",
-    (state) => state.currentTask,
-    {
-      create_characters: "characterCreator",
-      create_settings: "settingCreator",
-      create_world_rules: "worldRulesCreator",
-      create_timeline: "timelineCreator",
-      creation_complete: "masterSupervisor",
-    }
-  );
-
-  // Integration team supervisor to specialized agents
-  graph.addConditionalEdges(
-    "integrationTeamSupervisor",
-    (state) => state.currentTask,
-    {
-      assemble_narrative: "narrativeAssembler",
-      check_coherence: "coherenceChecker",
-      enrich_content: "enrichmentAgent",
-      format_bible: "formatSpecialist",
-      integration_complete: "masterSupervisor",
-    }
-  );
-
-  // Specialized agent return paths
-  graph.addEdge("contentAnalyzer", "analysisTeamSupervisor");
-  graph.addEdge("genreDetector", "analysisTeamSupervisor");
-  graph.addEdge("themeExtractor", "analysisTeamSupervisor");
-  graph.addEdge("characterCreator", "creationTeamSupervisor");
-  graph.addEdge("settingCreator", "creationTeamSupervisor");
-  graph.addEdge("worldRulesCreator", "creationTeamSupervisor");
-  graph.addEdge("timelineCreator", "creationTeamSupervisor");
-  graph.addEdge("narrativeAssembler", "integrationTeamSupervisor");
-  graph.addEdge("coherenceChecker", "integrationTeamSupervisor");
-  graph.addEdge("enrichmentAgent", "integrationTeamSupervisor");
-  graph.addEdge("formatSpecialist", "integrationTeamSupervisor");
+  // Agent return paths
+  graph.addEdge("contentAnalyst", "processCoordinator");
+  graph.addEdge("worldCreator", "processCoordinator");
+  graph.addEdge("documentAssembler", "processCoordinator");
+  graph.addEdge("humanFeedback", "processCoordinator");
 
   // Compile the graph
   return graph.compile();
 };
 ```
 
-## Advanced Features
+This simplified graph focuses on the core workflow stages with clear transitions between analysis, creation, assembly, and human feedback checkpoints. The process coordinator manages the overall flow and ensures that each stage is completed before moving to the next.
 
-### 1. Reflection and Self-Improvement
+## Practical Implementation Considerations
 
-The system incorporates reflection mechanisms to improve the quality of the world bible:
+### 1. Getting Started with File-Based Memory
 
-```typescript
-const reflectionAgent = async (
-  state: WorldBibleStateType,
-  config: RunnableConfig
-): Promise<WorldBibleStateType> => {
-  const { worldBible, contentAnalysis } = state;
+The file-based memory system is straightforward to implement:
 
-  // Reflection prompt to evaluate the world bible
-  const reflectionPrompt = ChatPromptTemplate.fromMessages([
-    ["system", `You are an expert editor and critic specializing in narrative world bibles.
-    Evaluate the quality, consistency, and completeness of this world bible.
-    Identify any weaknesses, gaps, or areas for improvement.`],
-    ["human", `Review this world bible for a ${contentAnalysis?.genre || "fictional"} universe:
+1. **Directory Setup**
+   ```bash
+   mkdir -p input analysis world_elements output
+   ```
 
-    Title: ${worldBible?.title || "Untitled World Bible"}
+2. **Initial File Creation**
+   ```bash
+   # Create a template for raw input
+   echo "# World Building Input\n\nEnter your initial ideas here..." > input/raw_input.md
 
-    Introduction:
-    ${worldBible?.introduction || "No introduction provided."}
+   # Create placeholder for analysis results
+   echo "{}" > analysis/content_analysis.json
+   ```
 
-    Characters:
-    ${worldBible?.charactersSection || "No characters section provided."}
+3. **File Monitoring**
+   - Use file system watchers to detect when humans modify files
+   - Implement simple polling mechanisms to check for file changes
+   - Create backup copies before making automated changes
 
-    Settings:
-    ${worldBible?.settingsSection || "No settings section provided."}
+4. **Version Control Integration**
+   - Use Git to track changes to all files
+   - Create commits at each workflow stage
+   - Enable easy rollback to previous versions
 
-    Timeline:
-    ${worldBible?.timelineSection || "No timeline section provided."}
+### 2. Human Interaction Patterns
 
-    World Rules:
-    ${worldBible?.worldRulesSection || "No world rules section provided."}
+The system supports several practical human interaction patterns:
 
-    Provide a detailed critique and suggestions for improvement.`],
-  ]);
+#### Question Bundling
 
-  const llm = new ChatOpenAI({
-    temperature: 0.3,
-    modelName: "gpt-4",
-  });
+Instead of interrupting humans with frequent questions, bundle related questions together:
 
-  const reflectionSchema = z.object({
-    evaluation: z.object({
-      strengths: z.array(z.string()).describe("Strengths of the world bible"),
-      weaknesses: z.array(z.string()).describe("Weaknesses or gaps in the world bible"),
-      suggestions: z.array(z.string()).describe("Specific suggestions for improvement"),
-      overallRating: z.number().min(1).max(10).describe("Overall quality rating (1-10)"),
-    }),
-  });
+```markdown
+# World Creation Questions - Round 1
 
-  const structuredLLM = llm.withStructuredOutput(reflectionSchema);
-  const reflection = await structuredLLM.invoke(
-    await reflectionPrompt.invoke({})
-  );
+Please answer the following questions to guide the world creation process:
 
-  return {
-    ...state,
-    reflection: reflection.evaluation,
-    currentTask: reflection.evaluation.overallRating >= 7 ? "complete" : "revise_bible",
-  };
-};
+1. SETTING: The analysis suggests a post-apocalyptic setting. Should this be:
+   a) Near-future Earth
+   b) Distant-future Earth
+   c) Another planet entirely
+   d) Other (please specify)
+
+2. MAGIC/TECHNOLOGY: What level of supernatural or advanced technology exists?
+   a) No magic, realistic technology only
+   b) Limited supernatural elements
+   c) Advanced technology indistinguishable from magic
+   d) Full magic system with defined rules
+   e) Other (please specify)
+
+3. TONE: What overall tone should the world have?
+   a) Grim and hopeless
+   b) Challenging but with hope
+   c) Neutral/realistic
+   d) Optimistic despite challenges
+   e) Other (please specify)
+
+4. FOCUS: Which aspect should receive the most detailed development?
+   a) Character relationships and societies
+   b) Physical environment and geography
+   c) Historical events and timeline
+   d) Systems (magic, technology, politics)
+   e) Other (please specify)
+
+5. ADDITIONAL NOTES: Please add any other guidance or specific elements you want included.
 ```
 
-### 2. Human-in-the-Loop Integration
+#### Structured Feedback Forms
 
-The system supports human feedback and intervention at key points:
+Provide templates for human feedback that make it easy to provide input:
 
-```typescript
-const humanFeedbackNode = async (
-  state: WorldBibleStateType,
-  config: RunnableConfig
-): Promise<WorldBibleStateType> => {
-  // In a real implementation, this would wait for human input
-  // For demonstration purposes, we'll simulate human feedback
+```markdown
+# World Element Feedback - Characters
 
-  const humanFeedback = {
-    approved: false,
-    comments: "Please add more detail to the magic system and expand the character relationships.",
-    specificFeedback: {
-      characters: "Deepen the protagonist's motivations.",
-      settings: "The capital city needs more cultural details.",
-      worldRules: "The magic system needs clearer limitations.",
-    },
-  };
+## Character: Elara Voss (Protagonist)
 
-  return {
-    ...state,
-    humanFeedback,
-    currentTask: humanFeedback.approved ? "complete" : "incorporate_feedback",
-  };
-};
+Current description:
+A former military engineer who survived the collapse by using her technical skills.
+Now leads a small community of survivors, struggling with the burden of leadership.
+
+Your feedback:
+[ ] Keep as is
+[ ] Minor revisions needed
+[ ] Major revisions needed
+
+Specific changes or additions:
+_________________________________________________
+_________________________________________________
+
+## Character: The Archivist (Antagonist)
+
+Current description:
+A mysterious figure who collects and hoards pre-collapse technology, believing
+humanity doesn't deserve a second chance with advanced tools.
+
+Your feedback:
+[ ] Keep as is
+[ ] Minor revisions needed
+[ ] Major revisions needed
+
+Specific changes or additions:
+_________________________________________________
+_________________________________________________
 ```
 
-### 3. Parallel Processing
+### 3. Handling Edge Cases
 
-The system can process multiple elements in parallel for efficiency:
+The simplified workflow needs to handle several common edge cases:
 
-```typescript
-const parallelElementCreation = async (
-  state: WorldBibleStateType,
-  config: RunnableConfig
-): Promise<WorldBibleStateType> => {
-  // Create multiple elements in parallel
-  const [characters, settings, worldRules] = await Promise.all([
-    characterCreatorAgent(state, config),
-    settingCreatorAgent(state, config),
-    worldRulesCreatorAgent(state, config),
-  ]);
+#### Conflicting Human Feedback
 
-  // Combine the results
-  return {
-    ...state,
-    characters: characters.characters,
-    settings: settings.settings,
-    worldRules: worldRules.worldRules,
-    currentTask: "create_timeline",
-  };
-};
-```
+When humans provide contradictory feedback across different stages:
+
+1. Identify the contradiction explicitly
+2. Present both versions side-by-side
+3. Ask for clarification on which should take precedence
+4. Document the decision in `consistency_notes.md`
+
+#### Incomplete Information
+
+When critical information is missing despite human feedback:
+
+1. Make reasonable assumptions based on genre conventions
+2. Clearly mark these assumptions in the output
+3. Bundle questions about these assumptions in the next feedback round
+4. Allow easy overriding of any assumptions
+
+#### Technical Failures
+
+When system components fail:
+
+1. Save all current state to files immediately
+2. Create detailed error logs with context
+3. Implement automatic resumption from last checkpoint
+4. Provide manual override options for humans
+
+### 4. Scaling for Different Project Sizes
+
+The system can be adjusted based on project scope:
+
+#### Small Projects (Short Stories, Single Scenes)
+- Use a single feedback round instead of multiple checkpoints
+- Focus on only the most essential world elements
+- Simplify the file structure to fewer files
+- Use a more condensed output format
+
+#### Medium Projects (Novels, Game Settings)
+- Use the standard three-checkpoint workflow as described
+- Implement the complete file structure
+- Focus on all core world elements
+- Generate comprehensive documentation
+
+#### Large Projects (Series, Franchises)
+- Add additional feedback checkpoints for more granular control
+- Expand the file structure with subdirectories for element categories
+- Implement cross-referencing between related elements
+- Create supplementary visualization files (maps, timelines, relationship diagrams)
+
+### 5. Integration with Other Tools
+
+The file-based approach makes integration with other tools straightforward:
+
+#### Text Editors and IDEs
+- Files can be opened in any text editor for human modification
+- Markdown format ensures compatibility with preview features
+- JSON files can be validated with standard tools
+
+#### Visualization Tools
+- Timeline data can be exported to timeline visualization tools
+- Character relationship data can generate network graphs
+- Setting descriptions can be used as prompts for image generation
+
+#### Version Control Systems
+- All files can be tracked in Git or other VCS
+- Branching can be used to explore alternative world versions
+- Merging can combine elements from different iterations
+
+#### Publishing Platforms
+- Final Markdown can be converted to various publishing formats
+- HTML export for web publishing
+- PDF generation for print materials
+- Integration with wiki systems for interactive exploration
 
 ## Conclusion
 
-This multi-agent LangGraph architecture provides a comprehensive approach to generating rich, imaginative narrative world bibles from unstructured input. By leveraging specialized agents organized in a hierarchical structure, the system can process, analyze, create, and refine all elements of a fictional universe.
+This simplified agentic workflow provides a pragmatic approach to generating narrative world bibles that balances AI capabilities with human creativity and oversight. By focusing on iterative dialogue, file-based memory, simplified roles, and flexible input mechanisms, the system creates a collaborative environment where humans and AI work together effectively.
 
 The design emphasizes:
 
-1. **Specialization**: Each agent focuses on a specific aspect of world bible creation
-2. **Coordination**: Supervisor agents ensure cohesive integration of elements
-3. **Richness**: Multiple agents contribute diverse perspectives and expertise
-4. **Flexibility**: The system can adapt to different genres, styles, and content types
-5. **Quality**: Reflection and human feedback mechanisms ensure high-quality output
+1. **Human-Centered Collaboration**: Clear checkpoints ensure humans maintain creative control
+2. **Practical Implementation**: File-based memory enables easy inspection and modification
+3. **Simplified Architecture**: Streamlined agent roles focus on essential functions
+4. **Iterative Refinement**: Multiple feedback loops improve quality incrementally
+5. **Flexibility**: The system accommodates both structured and unstructured human input
+6. **Accessibility**: Reduced complexity makes the system easier to implement and use
+7. **Adaptability**: The approach can be scaled for projects of different sizes and complexity
 
-This architecture can be extended and customized for various creative applications, from fiction writing and game development to educational content and interactive storytelling.
+This simplified workflow makes narrative world bible generation more accessible while maintaining the quality and depth needed for compelling fictional universes. It provides a practical foundation that can be implemented quickly for MVP projects and expanded as needed for more complex creative endeavors.
