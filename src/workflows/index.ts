@@ -7,4 +7,4 @@ export * from './registry.ts';
 export * from './inflation.ts';
 
 // Re-export the workflow types for convenience
-export type { Workflow, WorkflowOptions, OutputFormat } from '../types/workflow.ts';
+export type { OutputFormat, Workflow, WorkflowOptions } from '../types/workflow.ts';

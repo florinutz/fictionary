@@ -2,7 +2,6 @@
  * Type definitions for the application
  */
 
-
 /**
  * Configuration options for the application
  */

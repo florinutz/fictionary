@@ -58,7 +58,11 @@ export function truncate(str: string, maxLength: number): string {
     if (str.length <= maxLength) {
         return str;
     }
-    return str.slice(0, maxLength - 3) + '...';
+    if (maxLength <= 3) {
+        return '...';
+    }
+    // Return a substring that leaves room for the ellipsis without any spaces
+    return str.slice(0, maxLength - 3).replace(/,\s*$/, ',') + '...';
 }
 
 /**

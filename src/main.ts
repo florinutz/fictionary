@@ -5,9 +5,8 @@
 
 import { Command } from '$src/deps.ts';
 import { commandRegistry, inflateCommand } from '$src/commands/index.ts';
-import { workflowRegistry, inflationWorkflow } from '$src/workflows/index.ts';
+import { inflationWorkflow, workflowRegistry } from '$src/workflows/index.ts';
 import { logger } from '$src/lib/logger.ts';
-
 
 /**
  * Initialize the application

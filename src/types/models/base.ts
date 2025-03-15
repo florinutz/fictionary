@@ -8,20 +8,20 @@
  * All domain models should extend this interface
  */
 export interface Model {
-  /**
-   * Unique identifier for the model
-   */
-  id: string;
+    /**
+     * Unique identifier for the model
+     */
+    id: string;
 
-  /**
-   * Creation timestamp
-   */
-  createdAt: Date;
+    /**
+     * Creation timestamp
+     */
+    createdAt: Date;
 
-  /**
-   * Last update timestamp
-   */
-  updatedAt: Date;
+    /**
+     * Last update timestamp
+     */
+    updatedAt: Date;
 }
 
 /**
@@ -29,13 +29,20 @@ export interface Model {
  * Common metadata properties for domain models
  */
 export interface Metadata {
-  /**
-   * Tags associated with the model
-   */
-  tags?: string[];
+    /**
+     * Tags associated with the model
+     */
+    tags?: string[];
 
-  /**
-   * Custom properties
-   */
-  [key: string]: string | number | boolean | string[] | number[] | Record<string, unknown> | undefined;
+    /**
+     * Custom properties
+     */
+    [key: string]:
+        | string
+        | number
+        | boolean
+        | string[]
+        | number[]
+        | Record<string, unknown>
+        | undefined;
 }

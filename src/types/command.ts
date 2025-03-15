@@ -10,26 +10,26 @@ import { Command } from '../deps.ts';
  * All commands should implement this interface
  */
 export interface CommandDefinition {
-  /**
-   * Command name
-   */
-  name: string;
+    /**
+     * Command name
+     */
+    name: string;
 
-  /**
-   * Command description
-   */
-  description: string;
+    /**
+     * Command description
+     */
+    description: string;
 
-  /**
-   * Setup method to configure the command
-   * @param program The command instance to configure
-   * @returns The configured command
-   */
-  setup: (program: Command) => Command;
+    /**
+     * Setup method to configure the command
+     * @param program The command instance to configure
+     * @returns The configured command
+     */
+    setup: (program: Command) => Command;
 
-  /**
-   * Action method to execute when the command is invoked
-   * @param args Command arguments and options
-   */
-  action: (options: Record<string, unknown>, ...inputs: string[]) => Promise<void> | void;
+    /**
+     * Action method to execute when the command is invoked
+     * @param args Command arguments and options
+     */
+    action: (options: Record<string, unknown>, ...inputs: string[]) => Promise<void> | void;
 }
