@@ -2,25 +2,6 @@
  * Type definitions for the application
  */
 
-/**
- * Represents a pair of numbers for addition
- */
-export interface AdditionPair {
-    /**
-     * First number
-     */
-    a: number;
-
-    /**
-     * Second number
-     */
-    b: number;
-
-    /**
-     * Expected result of adding a and b
-     */
-    expected: number;
-}
 
 /**
  * Configuration options for the application

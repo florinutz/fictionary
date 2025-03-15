@@ -47,8 +47,8 @@ make dev
 # Show help information
 deno run src/main.ts
 
-# Add two numbers
-deno run src/main.ts add 2 3
+# Convert unstructured text into a structured narrative bible
+deno run src/main.ts inflate "Once upon a time in a magical kingdom..."
 ```
 
 ## Development

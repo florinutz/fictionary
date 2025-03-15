@@ -1,0 +1,6 @@
+---
+description: Run `make all` after code changes
+globs: *.ts, *.json
+alwaysApply: false
+---
+Every time you change the codebase, make sure at the end that `make all` passes and all problems are fixed.
