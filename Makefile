@@ -1,6 +1,6 @@
 .PHONY: all start dev test test-watch lint format check build clean cache help update-docs
 
-all: lint format check test #build
+all: lint format-check check test #build
 
 start:
 	deno task start
@@ -18,6 +18,9 @@ lint:
 	deno task lint
 
 format:
+	deno task fmt
+
+format-check:
 	deno task fmt
 
 check:
